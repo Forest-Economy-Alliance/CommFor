@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "862872272959",
+    "project_id": "ifri-23ae3",
+    "storage_bucket": "ifri-23ae3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:862872272959:android:bc09da9198aa13acb6788a",
+        "android_client_info": {
+          "package_name": "com.example.ifri"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "862872272959-dq5h7202dlbr5ur2lhmljeq63t3kjli3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDkkbU5Nh8ONAAfQBaOY1q7UMJ4drgixH4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "862872272959-dq5h7202dlbr5ur2lhmljeq63t3kjli3.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "862872272959-u9s15bod6pl5lb7r4vgsd4112ftvk2tn.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.ifri"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

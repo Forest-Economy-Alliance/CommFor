@@ -17,7 +17,11 @@ class Screen2 extends StatelessWidget {
           color: const Color(0xFF12160F),
           child: Padding(
             padding: const EdgeInsets.only(
-                left: 10.0, right: 10.0, top: 5.0, bottom: 5.0),
+              left: 10.0,
+              right: 10.0,
+              top: 5.0,
+              bottom: 5.0,
+            ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -59,9 +63,12 @@ class Screen2 extends StatelessWidget {
                     Container(
                       alignment: Alignment.center,
                       child: const SizedBox(
-                          height: 20,
-                          width: 300,
-                          child: Divider(color: Color(0xffD1D0BD))),
+                        height: 20,
+                        width: 300,
+                        child: Divider(
+                          color: Color(0xffD1D0BD),
+                        ),
+                      ),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(
