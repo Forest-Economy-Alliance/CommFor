@@ -34,7 +34,7 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
   flutter_svg: ^0.22.0
-  custom_radio_grouped_button: any
+  custom_radio_grouped_button: ^2.1.2+2
   json_annotation: ^4.6.0
   dio: ^4.0.6
   logger: ^1.1.0
@@ -46,6 +46,12 @@ dependencies:
   flutter_remix: ^0.0.3
   hive: ^2.2.3
   hive_flutter: ^1.1.0
+  firebase_database: ^9.0.19
+  fluttertoast: ^8.0.9
+  firebase_storage: ^10.3.2
+  permission_handler: ^8.1.1
+  image_picker: 0.8.5+3
+  shared_preferences: ^2.0.15
 
 dev_dependencies:
   flutter_test:
