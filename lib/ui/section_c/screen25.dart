@@ -1,24 +1,24 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:ifri/constants/section_b.dart';
+import 'package:ifri/constants/section_c.dart';
 import 'package:ifri/style/custom_button.dart';
 import 'package:ifri/style/custom_style.dart';
-import 'package:ifri/ui/section_b/screen2.dart';
+import 'package:ifri/ui/section_c/screen26.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ifri/constants/constants.dart';
 
-class Screen1 extends StatefulWidget {
-  const Screen1({Key? key}) : super(key: key);
+class Screen25 extends StatefulWidget {
+  const Screen25({Key? key}) : super(key: key);
 
   @override
-  State<Screen1> createState() => _Screen1State();
+  State<Screen25> createState() => _Screen25State();
 }
 
-class _Screen1State extends State<Screen1> {
+class _Screen25State extends State<Screen25> {
   DatabaseReference? ref;
   TextEditingController question1Controller = TextEditingController();
   TextEditingController question2Controller = TextEditingController();
-  String screenName = "screen_1";
+  String screenName = "screen_25";
   SharedPreferences? _sharedPreferences;
   String? userId;
   @override
@@ -30,7 +30,7 @@ class _Screen1State extends State<Screen1> {
   void initialize() async {
     _sharedPreferences = await SharedPreferences.getInstance();
     userId = _sharedPreferences!.getString(Constants.USER_ID);
-    ref = FirebaseDatabase.instance.ref('forms/${userId!}/1/section_b');
+    ref = FirebaseDatabase.instance.ref('forms/${userId!}/1/section_c');
     setData();
   }
 
@@ -64,7 +64,7 @@ class _Screen1State extends State<Screen1> {
                     margin: const EdgeInsets.symmetric(
                         horizontal: 20, vertical: 10),
                     child: const Text(
-                      SectionB.SECTION_B_SECTION_1,
+                      SectionC.SECTION_C_SECTION_10,
                       style: CustomStyle.screenTitle,
                     ),
                   ),
@@ -92,7 +92,7 @@ class _Screen1State extends State<Screen1> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(SectionB.SECTION_B_QUESTION_1,
+                    const Text(SectionC.SECTION_C_QUESTION_47,
                         style: CustomStyle.questionTitle),
                     const SizedBox(
                       height: 20,
@@ -105,7 +105,7 @@ class _Screen1State extends State<Screen1> {
                     const SizedBox(
                       height: 40,
                     ),
-                    const Text(SectionB.SECTION_B_QUESTION_2,
+                    const Text(SectionC.SECTION_C_QUESTION_48,
                         style: CustomStyle.questionTitle),
                     const SizedBox(
                       height: 20,
@@ -142,14 +142,14 @@ class _Screen1State extends State<Screen1> {
   void setData() async {
     final response1 = await ref!
         .child(screenName)
-        .child("question_1")
+        .child("question_47")
         .child("response")
         .get();
     question1Controller.text =
         null == response1.value ? "" : response1.value.toString();
     final response2 = await ref!
         .child(screenName)
-        .child("question_2")
+        .child("question_48")
         .child("response")
         .get();
     question2Controller.text =
@@ -159,12 +159,12 @@ class _Screen1State extends State<Screen1> {
   void syncData(BuildContext context) async {
     await ref!.update({
       screenName: {
-        "question_1": {
-          "question": SectionB.SECTION_B_QUESTION_1,
+        "question_47": {
+          "question": SectionC.SECTION_C_QUESTION_47,
           "response": question1Controller.text
         },
-        "question_2": {
-          "question": SectionB.SECTION_B_QUESTION_2,
+        "question_48": {
+          "question": SectionC.SECTION_C_QUESTION_48,
           "response": question2Controller.text
         }
       }
@@ -175,7 +175,7 @@ class _Screen1State extends State<Screen1> {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (_) {
-          return const Screen2();
+          return const Screen26();
         },
       ),
     );

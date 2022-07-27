@@ -1,26 +1,29 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:ifri/constants/section_b.dart';
+import 'package:ifri/constants/constants.dart';
+import 'package:ifri/constants/section_c.dart';
 import 'package:ifri/style/custom_button.dart';
 import 'package:ifri/style/custom_style.dart';
-import 'package:ifri/ui/section_b/screen2.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:ifri/constants/constants.dart';
+import 'package:ifri/ui/section_c/screen27.dart';
 
-class Screen1 extends StatefulWidget {
-  const Screen1({Key? key}) : super(key: key);
+class Screen26 extends StatefulWidget {
+  const Screen26({Key? key}) : super(key: key);
 
   @override
-  State<Screen1> createState() => _Screen1State();
+  State<Screen26> createState() => _Screen26State();
 }
 
-class _Screen1State extends State<Screen1> {
+class _Screen26State extends State<Screen26> {
   DatabaseReference? ref;
-  TextEditingController question1Controller = TextEditingController();
-  TextEditingController question2Controller = TextEditingController();
-  String screenName = "screen_1";
+  TextEditingController question49aController = TextEditingController();
+  TextEditingController question49bController = TextEditingController();
+  TextEditingController question49cController = TextEditingController();
+
+  String screenName = "screen_26";
   SharedPreferences? _sharedPreferences;
   String? userId;
+
   @override
   void initState() {
     super.initState();
@@ -30,7 +33,7 @@ class _Screen1State extends State<Screen1> {
   void initialize() async {
     _sharedPreferences = await SharedPreferences.getInstance();
     userId = _sharedPreferences!.getString(Constants.USER_ID);
-    ref = FirebaseDatabase.instance.ref('forms/${userId!}/1/section_b');
+    ref = FirebaseDatabase.instance.ref('forms/${userId!}/1/section_c');
     setData();
   }
 
@@ -64,7 +67,7 @@ class _Screen1State extends State<Screen1> {
                     margin: const EdgeInsets.symmetric(
                         horizontal: 20, vertical: 10),
                     child: const Text(
-                      SectionB.SECTION_B_SECTION_1,
+                      SectionC.SECTION_C_SECTION_11,
                       style: CustomStyle.screenTitle,
                     ),
                   ),
@@ -92,26 +95,44 @@ class _Screen1State extends State<Screen1> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(SectionB.SECTION_B_QUESTION_1,
+                    const Text(SectionC.SECTION_C_QUESTION_49,
+                        style: CustomStyle.questionTitle),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    const Text("(1) Local (year)",
                         style: CustomStyle.questionTitle),
                     const SizedBox(
                       height: 20,
                     ),
                     TextField(
-                        controller: question1Controller,
+                        controller: question49aController,
                         style: CustomStyle.answer,
                         textAlign: TextAlign.start,
                         decoration: CustomStyle.answerInputDecoration),
                     const SizedBox(
-                      height: 40,
+                      height: 20,
                     ),
-                    const Text(SectionB.SECTION_B_QUESTION_2,
+                    const Text("(2) Regional (year)",
                         style: CustomStyle.questionTitle),
                     const SizedBox(
                       height: 20,
                     ),
                     TextField(
-                        controller: question2Controller,
+                        controller: question49bController,
+                        style: CustomStyle.answer,
+                        textAlign: TextAlign.start,
+                        decoration: CustomStyle.answerInputDecoration),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    const Text("(3) National (year)",
+                        style: CustomStyle.questionTitle),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    TextField(
+                        controller: question49cController,
                         style: CustomStyle.answer,
                         textAlign: TextAlign.start,
                         decoration: CustomStyle.answerInputDecoration),
@@ -132,6 +153,9 @@ class _Screen1State extends State<Screen1> {
                       child: CustomButton.nextButton),
                 ],
               ),
+              const SizedBox(
+                height: 100,
+              ),
             ],
           ),
         ),
@@ -140,32 +164,51 @@ class _Screen1State extends State<Screen1> {
   }
 
   void setData() async {
-    final response1 = await ref!
-        .child(screenName)
-        .child("question_1")
-        .child("response")
-        .get();
-    question1Controller.text =
-        null == response1.value ? "" : response1.value.toString();
     final response2 = await ref!
         .child(screenName)
-        .child("question_2")
+        .child("question_49")
+        .child("1")
         .child("response")
         .get();
-    question2Controller.text =
+    question49aController.text =
         null == response2.value ? "" : response2.value.toString();
+
+    final response3 = await ref!
+        .child(screenName)
+        .child("question_49")
+        .child("2")
+        .child("response")
+        .get();
+    question49bController.text =
+        null == response3.value ? "" : response3.value.toString();
+
+    final response4 = await ref!
+        .child(screenName)
+        .child("question_49")
+        .child("3")
+        .child("response")
+        .get();
+    question49cController.text =
+        null == response4.value ? "" : response4.value.toString();
   }
 
   void syncData(BuildContext context) async {
     await ref!.update({
       screenName: {
-        "question_1": {
-          "question": SectionB.SECTION_B_QUESTION_1,
-          "response": question1Controller.text
-        },
-        "question_2": {
-          "question": SectionB.SECTION_B_QUESTION_2,
-          "response": question2Controller.text
+        "question_49": {
+          "question": SectionC.SECTION_C_QUESTION_49,
+          "1": {
+            "title": "(1) Local (year)",
+            "response": question49aController.text
+          },
+          "2": {
+            "title": "(2) Regional (year)",
+            "response": question49bController.text
+          },
+          "3": {
+            "title": "(3) National (year)",
+            "response": question49cController.text
+          }
         }
       }
     }).whenComplete(() => navigateToNextScreen(context));
@@ -175,7 +218,7 @@ class _Screen1State extends State<Screen1> {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (_) {
-          return const Screen2();
+          return const Screen27();
         },
       ),
     );

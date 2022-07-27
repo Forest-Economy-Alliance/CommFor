@@ -7,6 +7,12 @@ class CustomStyle {
   static const TextStyle questionTitle = TextStyle(
       fontFamily: 'HelveticaNeue', fontSize: 16, color: Color(0xffD1D0BD));
 
+  static const TextStyle questionBoldTitle = TextStyle(
+      fontFamily: 'HelveticaNeue',
+      fontSize: 16,
+      color: Color(0xffD1D0BD),
+      fontWeight: FontWeight.bold);
+
   static const TextStyle answer = TextStyle(
       fontFamily: 'HelveticaNeue', fontSize: 16, color: Color(0xffD1D0BD));
 

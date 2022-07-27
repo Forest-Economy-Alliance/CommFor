@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ifri/constants/section_b.dart';
+import 'package:ifri/constants/section_c.dart';
 import 'package:ifri/style/custom_button.dart';
 import 'package:ifri/style/custom_option.dart';
 import 'package:ifri/style/custom_style.dart';
@@ -7,17 +7,19 @@ import 'package:ifri/ui/section_b/screen3.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ifri/constants/constants.dart';
+import 'package:ifri/ui/section_c/screen20.dart';
+import 'package:ifri/ui/home/home_page.dart';
 
-class Screen2 extends StatefulWidget {
-  const Screen2({Key? key}) : super(key: key);
+class Screen28 extends StatefulWidget {
+  const Screen28({Key? key}) : super(key: key);
 
   @override
-  State<Screen2> createState() => _Screen2State();
+  State<Screen28> createState() => _Screen28State();
 }
 
-class _Screen2State extends State<Screen2> {
+class _Screen28State extends State<Screen28> {
   DatabaseReference? ref;
-  String screenName = "screen_2";
+  String screenName = "screen_28";
   String _response3 = "", _response4 = "";
   bool isLoading = true;
   SharedPreferences? _sharedPreferences;
@@ -31,7 +33,7 @@ class _Screen2State extends State<Screen2> {
   void initialize() async {
     _sharedPreferences = await SharedPreferences.getInstance();
     userId = _sharedPreferences!.getString(Constants.USER_ID);
-    ref = FirebaseDatabase.instance.ref('forms/${userId!}/1/section_b');
+    ref = FirebaseDatabase.instance.ref('forms/${userId!}/1/section_c');
     setData();
   }
 
@@ -81,7 +83,7 @@ class _Screen2State extends State<Screen2> {
                         margin: const EdgeInsets.symmetric(
                             horizontal: 20, vertical: 10),
                         child: const Text(
-                          SectionB.SECTION_B_SECTION_2,
+                          SectionC.SECTION_C_SECTION_11,
                           style: CustomStyle.screenTitle,
                         ),
                       ),
@@ -114,30 +116,39 @@ class _Screen2State extends State<Screen2> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text(SectionB.SECTION_B_QUESTION_3,
+                            const Text(SectionC.SECTION_C_QUESTION_51,
                                 style: CustomStyle.questionTitle),
                             const SizedBox(
                               height: 5,
                             ),
                             CustomOption.optionRadioButtons(const [
-                              'Community',
-                              'Private',
-                              'Government',
-                              'Other',
+                              'Grievance',
+                              'Development',
+                              'Land rights',
+                              'Dispute/conflict resolution',
+                              'Private benefits and schemes',
+                              'Banking and credit',
+                              'Others',
                             ], true, _response3, setResponse3),
                             const SizedBox(
                               height: 10,
                             ),
-                            const Text(SectionB.SECTION_B_QUESTION_4,
+                            const Text(SectionC.SECTION_C_QUESTION_52,
                                 style: CustomStyle.questionTitle),
                             const SizedBox(
                               height: 5,
                             ),
-                            CustomOption.optionRadioButtons(
-                                const ['Yes', 'No', 'No Rights Defined'],
-                                true,
-                                _response4,
-                                setResponse4),
+                            CustomOption.optionRadioButtons(const [
+                              'Once a day',
+                              'Multiple times in a week',
+                              'Once a week',
+                              'Once in two weeks',
+                              'Once in a month',
+                              'Once in three months',
+                              'Once in six months',
+                              'Once in a year',
+                              'Never',
+                            ], true, _response4, setResponse4),
                           ],
                         ),
                       ),
@@ -152,7 +163,7 @@ class _Screen2State extends State<Screen2> {
                               onTap: () => syncData(context),
                               splashColor: Colors.lightBlue,
                               borderRadius: BorderRadius.circular(2),
-                              child: CustomButton.nextButton),
+                              child: CustomButton.submitButton),
                         ],
                       ),
                       const SizedBox(
@@ -172,13 +183,13 @@ class _Screen2State extends State<Screen2> {
   void setData() async {
     final res3 = await ref!
         .child(screenName)
-        .child("question_3")
+        .child("question_51")
         .child("response")
         .get();
 
     final res4 = await ref!
         .child(screenName)
-        .child("question_4")
+        .child("question_52")
         .child("response")
         .get();
 
@@ -192,12 +203,12 @@ class _Screen2State extends State<Screen2> {
   void syncData(BuildContext context) async {
     await ref!.update({
       screenName: {
-        "question_3": {
-          "question": SectionB.SECTION_B_QUESTION_3,
+        "question_51": {
+          "question": SectionC.SECTION_C_QUESTION_51,
           "response": _response3
         },
-        "question_4": {
-          "question": SectionB.SECTION_B_QUESTION_4,
+        "question_52": {
+          "question": SectionC.SECTION_C_QUESTION_52,
           "response": _response4
         }
       }
@@ -208,7 +219,7 @@ class _Screen2State extends State<Screen2> {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (_) {
-          return const Screen3();
+          return const HomePage();
         },
       ),
     );

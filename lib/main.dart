@@ -6,7 +6,7 @@ import 'package:ifri/services/auth_service/firebase_auth_impl.dart';
 import 'package:ifri/ui/home/home_page.dart';
 import 'package:ifri/ui/login/login_wrapper.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:ifri/ui/section_b/screen1.dart';
+import 'package:ifri/ui/section_c/screen12.dart';
 import 'package:ifri/ui/section_b/screen6.dart';
 import 'package:ifri/ui/section_b/screen7.dart';
 import 'package:ifri/ui/section_b/screen8.dart';
@@ -58,7 +58,7 @@ class _MyAppState extends State<MyApp> {
         initialRoute: '/',
         routes: {
           '/': (BuildContext ctx) {
-            return const Screen1();
+            return const Screen12();
           },
           '/login': (BuildContext ctx) {
             return const LoginWrapper();

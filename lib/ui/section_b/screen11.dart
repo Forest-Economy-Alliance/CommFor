@@ -6,6 +6,8 @@ import 'package:ifri/style/custom_style.dart';
 import 'package:ifri/ui/home/home_page.dart';
 import 'package:ifri/ui/section_b/screen1.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:ifri/constants/constants.dart';
 
 class Screen11 extends StatefulWidget {
   const Screen11({Key? key}) : super(key: key);
@@ -15,14 +17,23 @@ class Screen11 extends StatefulWidget {
 }
 
 class _Screen11State extends State<Screen11> {
-  DatabaseReference ref = FirebaseDatabase.instance.ref('forms/3/1/section_b');
+  DatabaseReference? ref;
   String screenName = "screen_11";
   String _response13 = "", _response14 = "";
   bool isLoading = true;
+  SharedPreferences? _sharedPreferences;
+  String? userId;
 
   @override
   void initState() {
     super.initState();
+    initialize();
+  }
+
+  void initialize() async {
+    _sharedPreferences = await SharedPreferences.getInstance();
+    userId = _sharedPreferences!.getString(Constants.USER_ID);
+    ref = FirebaseDatabase.instance.ref('forms/${userId!}/1/section_b');
     setData();
   }
 
@@ -39,13 +50,13 @@ class _Screen11State extends State<Screen11> {
   }
 
   void setData() async {
-    final res3 = await ref
+    final res3 = await ref!
         .child(screenName)
         .child("question_13")
         .child("response")
         .get();
 
-    final res4 = await ref
+    final res4 = await ref!
         .child(screenName)
         .child("question_14")
         .child("response")
@@ -59,7 +70,7 @@ class _Screen11State extends State<Screen11> {
   }
 
   void syncData(BuildContext context) async {
-    await ref.update({
+    await ref!.update({
       screenName: {
         "question_13": {
           "question": SectionB.SECTION_B_QUESTION_13,
