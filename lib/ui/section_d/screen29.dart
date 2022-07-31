@@ -1,24 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:ifri/constants/section_c.dart';
+import 'package:ifri/constants/section_d.dart';
 import 'package:ifri/style/custom_button.dart';
 import 'package:ifri/style/custom_option.dart';
 import 'package:ifri/style/custom_style.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ifri/constants/constants.dart';
-import 'package:ifri/ui/section_c/screen20.dart';
+import 'package:ifri/ui/section_d/screen30.dart';
 
-class Screen19 extends StatefulWidget {
-  const Screen19({Key? key}) : super(key: key);
+class Screen29 extends StatefulWidget {
+  const Screen29({Key? key}) : super(key: key);
 
   @override
-  State<Screen19> createState() => _Screen19State();
+  State<Screen29> createState() => _Screen29State();
 }
 
-class _Screen19State extends State<Screen19> {
+class _Screen29State extends State<Screen29> {
   DatabaseReference? ref;
-  String screenName = "screen_19";
-  String _response3 = "", _response4 = "", _response5 = "";
+  String screenName = "screen_29";
+  String _response = "";
   bool isLoading = true;
   SharedPreferences? _sharedPreferences;
   String? userId;
@@ -31,20 +31,12 @@ class _Screen19State extends State<Screen19> {
   void initialize() async {
     _sharedPreferences = await SharedPreferences.getInstance();
     userId = _sharedPreferences!.getString(Constants.USER_ID);
-    ref = FirebaseDatabase.instance.ref('forms/${userId!}/1/section_c');
+    ref = FirebaseDatabase.instance.ref('forms/${userId!}/1/section_d');
     setData();
   }
 
-  void setResponse3(String value) async {
-    _response3 = value;
-  }
-
-  void setResponse4(String value) async {
-    _response4 = value;
-  }
-
-  void setResponse5(String value) async {
-    _response5 = value;
+  void setResponse(String value) async {
+    _response = value;
   }
 
   @override
@@ -85,7 +77,7 @@ class _Screen19State extends State<Screen19> {
                         margin: const EdgeInsets.symmetric(
                             horizontal: 20, vertical: 10),
                         child: const Text(
-                          SectionC.SECTION_C_SECTION_5,
+                          SectionD.SECTION_D_SECTION_1,
                           style: CustomStyle.screenTitle,
                         ),
                       ),
@@ -118,42 +110,21 @@ class _Screen19State extends State<Screen19> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text(SectionC.SECTION_C_QUESTION_36,
+                            const Text(SectionD.SECTION_D_QUESTION_53,
                                 style: CustomStyle.questionTitle),
                             const SizedBox(
                               height: 5,
                             ),
                             CustomOption.optionRadioButtons(const [
-                              'Increased',
-                              'No change',
-                              'Decreased',
-                            ], true, _response3, setResponse3),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            const Text(SectionC.SECTION_C_QUESTION_37,
-                                style: CustomStyle.questionTitle),
-                            const SizedBox(
-                              height: 5,
-                            ),
-                            CustomOption.optionRadioButtons(const [
-                              'Increased',
-                              'No change',
-                              'Decreased',
-                            ], true, _response4, setResponse4),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            const Text(SectionC.SECTION_C_QUESTION_38,
-                                style: CustomStyle.questionTitle),
-                            const SizedBox(
-                              height: 5,
-                            ),
-                            CustomOption.optionRadioButtons(const [
-                              'Increased',
-                              'No change',
-                              'Decreased',
-                            ], true, _response5, setResponse5),
+                              'Private management',
+                              'Community management – Formal',
+                              'Community management – Informal',
+                              'Government management',
+                              'Co-management – Community and Government',
+                              'Co-management – Community and NGO',
+                              'Co-management – Community and Private company',
+                              'Other',
+                            ], true, _response, setResponse),
                           ],
                         ),
                       ),
@@ -188,26 +159,12 @@ class _Screen19State extends State<Screen19> {
   void setData() async {
     final res3 = await ref!
         .child(screenName)
-        .child("question_36")
-        .child("response")
-        .get();
-
-    final res4 = await ref!
-        .child(screenName)
-        .child("question_37")
-        .child("response")
-        .get();
-
-    final res5 = await ref!
-        .child(screenName)
-        .child("question_38")
+        .child("question_53")
         .child("response")
         .get();
 
     setState(() {
-      _response3 = null == res3.value ? "" : res3.value.toString();
-      _response4 = null == res4.value ? "" : res4.value.toString();
-      _response5 = null == res5.value ? "" : res5.value.toString();
+      _response = null == res3.value ? "" : res3.value.toString();
       isLoading = false;
     });
   }
@@ -215,17 +172,9 @@ class _Screen19State extends State<Screen19> {
   void syncData(BuildContext context) async {
     await ref!.update({
       screenName: {
-        "question_36": {
-          "question": SectionC.SECTION_C_QUESTION_36,
-          "response": _response3
-        },
-        "question_37": {
-          "question": SectionC.SECTION_C_QUESTION_37,
-          "response": _response4
-        },
-        "question_38": {
-          "question": SectionC.SECTION_C_QUESTION_38,
-          "response": _response5
+        "question_53": {
+          "question": SectionD.SECTION_D_QUESTION_53,
+          "response": _response
         }
       }
     }).whenComplete(() => navigateToNextScreen(context));
@@ -235,7 +184,7 @@ class _Screen19State extends State<Screen19> {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (_) {
-          return const Screen20();
+          return const Screen30();
         },
       ),
     );

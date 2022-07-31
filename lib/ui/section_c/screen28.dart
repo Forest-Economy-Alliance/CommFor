@@ -3,11 +3,9 @@ import 'package:ifri/constants/section_c.dart';
 import 'package:ifri/style/custom_button.dart';
 import 'package:ifri/style/custom_option.dart';
 import 'package:ifri/style/custom_style.dart';
-import 'package:ifri/ui/section_b/screen3.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ifri/constants/constants.dart';
-import 'package:ifri/ui/section_c/screen20.dart';
 import 'package:ifri/ui/home/home_page.dart';
 
 class Screen28 extends StatefulWidget {

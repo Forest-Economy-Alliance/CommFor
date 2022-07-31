@@ -1,28 +1,26 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:ifri/constants/constants.dart';
-import 'package:ifri/constants/section_c.dart';
+import 'package:ifri/constants/section_d.dart';
 import 'package:ifri/style/custom_button.dart';
 import 'package:ifri/style/custom_style.dart';
+import 'package:ifri/ui/section_d/screen32.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:ifri/ui/section_c/screen17.dart';
+import 'package:ifri/constants/constants.dart';
 
-class Screen16 extends StatefulWidget {
-  const Screen16({Key? key}) : super(key: key);
+class Screen31 extends StatefulWidget {
+  const Screen31({Key? key}) : super(key: key);
 
   @override
-  State<Screen16> createState() => _Screen16State();
+  State<Screen31> createState() => _Screen31State();
 }
 
-class _Screen16State extends State<Screen16> {
+class _Screen31State extends State<Screen31> {
   DatabaseReference? ref;
-  TextEditingController question25Controller = TextEditingController();
-  TextEditingController question26Controller = TextEditingController();
-  TextEditingController question17Controller = TextEditingController();
-  String screenName = "screen_16";
+  TextEditingController question1Controller = TextEditingController();
+  TextEditingController question2Controller = TextEditingController();
+  String screenName = "screen_31";
   SharedPreferences? _sharedPreferences;
   String? userId;
-
   @override
   void initState() {
     super.initState();
@@ -32,7 +30,7 @@ class _Screen16State extends State<Screen16> {
   void initialize() async {
     _sharedPreferences = await SharedPreferences.getInstance();
     userId = _sharedPreferences!.getString(Constants.USER_ID);
-    ref = FirebaseDatabase.instance.ref('forms/${userId!}/1/section_c');
+    ref = FirebaseDatabase.instance.ref('forms/${userId!}/1/section_d');
     setData();
   }
 
@@ -66,7 +64,7 @@ class _Screen16State extends State<Screen16> {
                     margin: const EdgeInsets.symmetric(
                         horizontal: 20, vertical: 10),
                     child: const Text(
-                      SectionC.SECTION_C_SECTION_3,
+                      SectionD.SECTION_D_SECTION_2,
                       style: CustomStyle.screenTitle,
                     ),
                   ),
@@ -94,26 +92,26 @@ class _Screen16State extends State<Screen16> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(SectionC.SECTION_C_QUESTION_25,
+                    const Text(SectionD.SECTION_D_QUESTION_55,
                         style: CustomStyle.questionTitle),
                     const SizedBox(
                       height: 20,
                     ),
                     TextField(
-                        controller: question25Controller,
+                        controller: question1Controller,
                         style: CustomStyle.answer,
                         textAlign: TextAlign.start,
                         decoration: CustomStyle.answerInputDecoration),
                     const SizedBox(
                       height: 40,
                     ),
-                    const Text(SectionC.SECTION_C_QUESTION_26,
+                    const Text(SectionD.SECTION_D_QUESTION_56,
                         style: CustomStyle.questionTitle),
                     const SizedBox(
                       height: 20,
                     ),
                     TextField(
-                        controller: question26Controller,
+                        controller: question2Controller,
                         style: CustomStyle.answer,
                         textAlign: TextAlign.start,
                         decoration: CustomStyle.answerInputDecoration),
@@ -144,30 +142,30 @@ class _Screen16State extends State<Screen16> {
   void setData() async {
     final response1 = await ref!
         .child(screenName)
-        .child("question_25")
+        .child("question_55")
         .child("response")
         .get();
-    question25Controller.text =
+    question1Controller.text =
         null == response1.value ? "" : response1.value.toString();
     final response2 = await ref!
         .child(screenName)
-        .child("question_26")
+        .child("question_56")
         .child("response")
         .get();
-    question26Controller.text =
+    question2Controller.text =
         null == response2.value ? "" : response2.value.toString();
   }
 
   void syncData(BuildContext context) async {
     await ref!.update({
       screenName: {
-        "question_25": {
-          "question": SectionC.SECTION_C_QUESTION_25,
-          "response": question25Controller.text
+        "question_55": {
+          "question": SectionD.SECTION_D_QUESTION_55,
+          "response": question1Controller.text
         },
-        "question_26": {
-          "question": SectionC.SECTION_C_QUESTION_26,
-          "response": question26Controller.text
+        "question_56": {
+          "question": SectionD.SECTION_D_QUESTION_56,
+          "response": question2Controller.text
         }
       }
     }).whenComplete(() => navigateToNextScreen(context));
@@ -177,7 +175,7 @@ class _Screen16State extends State<Screen16> {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (_) {
-          return const Screen17();
+          return const Screen32();
         },
       ),
     );

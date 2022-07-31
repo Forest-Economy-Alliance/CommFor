@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:ifri/constants/constants.dart';
 import 'package:ifri/constants/section_b.dart';
 import 'package:ifri/style/custom_button.dart';
@@ -10,7 +9,6 @@ import 'package:ifri/style/custom_option.dart';
 import 'package:ifri/style/custom_style.dart';
 import 'package:ifri/style/custom_toast.dart';
 import 'package:ifri/ui/section_b/screen10.dart';
-import 'package:ifri/ui/section_b/screen7.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';

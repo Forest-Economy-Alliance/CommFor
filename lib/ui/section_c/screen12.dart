@@ -211,7 +211,7 @@ class _Screen12State extends State<Screen12> {
 
     setState(() {
       _response4 = null == res4.value ? "" : res4.value.toString();
-      print("_response4" + _response4);
+
       isLoading = false;
     });
   }

@@ -1,27 +1,30 @@
 import 'package:flutter/material.dart';
-import 'package:ifri/constants/section_c.dart';
+import 'package:ifri/constants/section_d.dart';
 import 'package:ifri/style/custom_button.dart';
 import 'package:ifri/style/custom_option.dart';
 import 'package:ifri/style/custom_style.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ifri/constants/constants.dart';
-import 'package:ifri/ui/section_c/screen21.dart';
+import 'package:ifri/ui/section_d/screen33.dart';
 
-class Screen20 extends StatefulWidget {
-  const Screen20({Key? key}) : super(key: key);
+class Screen32 extends StatefulWidget {
+  const Screen32({Key? key}) : super(key: key);
 
   @override
-  State<Screen20> createState() => _Screen20State();
+  State<Screen32> createState() => _Screen32State();
 }
 
-class _Screen20State extends State<Screen20> {
+class _Screen32State extends State<Screen32> {
   DatabaseReference? ref;
-  String screenName = "screen_20";
+  String screenName = "screen_32";
   bool isLoading = true;
   Map<int, String> response = {};
+  String response2 = "";
   SharedPreferences? _sharedPreferences;
   String? userId;
+  TextEditingController question1Controller = TextEditingController();
+  TextEditingController question2Controller = TextEditingController();
 
   @override
   void initState() {
@@ -32,12 +35,16 @@ class _Screen20State extends State<Screen20> {
   void initialize() async {
     _sharedPreferences = await SharedPreferences.getInstance();
     userId = _sharedPreferences!.getString(Constants.USER_ID);
-    ref = FirebaseDatabase.instance.ref('forms/${userId!}/1/section_c');
+    ref = FirebaseDatabase.instance.ref('forms/${userId!}/1/section_d');
     setData();
   }
 
   void setResponse(int position, String value) async {
     response[position] = value;
+  }
+
+  void setResponse2(String value) async {
+    response2 = value;
   }
 
   @override
@@ -74,7 +81,7 @@ class _Screen20State extends State<Screen20> {
                         margin: const EdgeInsets.symmetric(
                             horizontal: 20, vertical: 10),
                         child: const Text(
-                          SectionC.SECTION_C_SECTION_6,
+                          SectionD.SECTION_D_SECTION_2,
                           style: CustomStyle.screenTitle,
                         ),
                       ),
@@ -102,7 +109,7 @@ class _Screen20State extends State<Screen20> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: const [
-                        Text(SectionC.SECTION_C_QUESTION_39,
+                        Text(SectionD.SECTION_D_QUESTION_57,
                             style: CustomStyle.questionTitle),
                         SizedBox(
                           height: 20,
@@ -116,7 +123,7 @@ class _Screen20State extends State<Screen20> {
                   Padding(
                     padding: const EdgeInsets.only(left: 10.0),
                     child: SizedBox(
-                      height: 600,
+                      height: 200,
                       child: Row(children: [
                         Column(
                           children: [
@@ -124,9 +131,9 @@ class _Screen20State extends State<Screen20> {
                               children: [
                                 const SizedBox(
                                   width: 200,
-                                  height: 60,
+                                  height: 30,
                                   child: Text(
-                                      SectionC.SECTION_C_QUESTION_39_OPTION_1,
+                                      SectionD.SECTION_D_QUESTION_57_POINT_1,
                                       style: CustomStyle.answer),
                                 ),
                                 CustomOption.yesNoButtons(
@@ -137,9 +144,9 @@ class _Screen20State extends State<Screen20> {
                               children: [
                                 const SizedBox(
                                   width: 200,
-                                  height: 75,
+                                  height: 30,
                                   child: Text(
-                                      SectionC.SECTION_C_QUESTION_39_OPTION_2,
+                                      SectionD.SECTION_D_QUESTION_57_POINT_2,
                                       style: CustomStyle.answer),
                                 ),
                                 CustomOption.yesNoButtons(
@@ -150,91 +157,13 @@ class _Screen20State extends State<Screen20> {
                               children: [
                                 const SizedBox(
                                   width: 200,
-                                  height: 60,
+                                  height: 30,
                                   child: Text(
-                                      SectionC.SECTION_C_QUESTION_39_OPTION_3,
+                                      SectionD.SECTION_D_QUESTION_57_POINT_3,
                                       style: CustomStyle.answer),
                                 ),
                                 CustomOption.yesNoButtons(
                                     3, response[3], setResponse),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                const SizedBox(
-                                  width: 200,
-                                  height: 75,
-                                  child: Text(
-                                      SectionC.SECTION_C_QUESTION_39_OPTION_4,
-                                      style: CustomStyle.answer),
-                                ),
-                                CustomOption.yesNoButtons(
-                                    4, response[4], setResponse),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                const SizedBox(
-                                  width: 200,
-                                  height: 75,
-                                  child: Text(
-                                      SectionC.SECTION_C_QUESTION_39_OPTION_5,
-                                      style: CustomStyle.answer),
-                                ),
-                                CustomOption.yesNoButtons(
-                                    5, response[5], setResponse),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                const SizedBox(
-                                  width: 200,
-                                  height: 60,
-                                  child: Text(
-                                      SectionC.SECTION_C_QUESTION_39_OPTION_6,
-                                      style: CustomStyle.answer),
-                                ),
-                                CustomOption.yesNoButtons(
-                                    6, response[6], setResponse),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                const SizedBox(
-                                  width: 200,
-                                  height: 60,
-                                  child: Text(
-                                      SectionC.SECTION_C_QUESTION_39_OPTION_7,
-                                      style: CustomStyle.answer),
-                                ),
-                                CustomOption.yesNoButtons(
-                                    7, response[7], setResponse),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                const SizedBox(
-                                  width: 200,
-                                  height: 75,
-                                  child: Text(
-                                      SectionC.SECTION_C_QUESTION_39_OPTION_8,
-                                      style: CustomStyle.answer),
-                                ),
-                                CustomOption.yesNoButtons(
-                                    8, response[8], setResponse),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                const SizedBox(
-                                  width: 200,
-                                  height: 30,
-                                  child: Text(
-                                      SectionC.SECTION_C_QUESTION_39_OPTION_9,
-                                      style: CustomStyle.answer),
-                                ),
-                                CustomOption.yesNoButtons(
-                                    9, response[9], setResponse),
                               ],
                             ),
                           ],
@@ -242,6 +171,43 @@ class _Screen20State extends State<Screen20> {
                       ]),
                     ),
                   ),
+                  const Text(SectionD.SECTION_D_QUESTION_58,
+                      style: CustomStyle.questionTitle),
+                  const SizedBox(
+                    height: 5,
+                  ),
+                  CustomOption.optionRadioButtons(const [
+                    'Yes',
+                    'No',
+                  ], true, response2, setResponse2),
+                  const Text(SectionD.SECTION_D_QUESTION_59,
+                      style: CustomStyle.questionTitle),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  const Text(SectionD.SECTION_D_QUESTION_59_PROPERTY_1,
+                      style: CustomStyle.optionYesNo),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  TextField(
+                      controller: question1Controller,
+                      style: CustomStyle.answer,
+                      textAlign: TextAlign.start,
+                      decoration: CustomStyle.answerInputDecoration),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  const Text(SectionD.SECTION_D_QUESTION_59_PROPERTY_2,
+                      style: CustomStyle.optionYesNo),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  TextField(
+                      controller: question2Controller,
+                      style: CustomStyle.answer,
+                      textAlign: TextAlign.start,
+                      decoration: CustomStyle.answerInputDecoration),
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.end,
@@ -266,7 +232,7 @@ class _Screen20State extends State<Screen20> {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (_) {
-          return const Screen21();
+          return const Screen33();
         },
       ),
     );
@@ -275,7 +241,7 @@ class _Screen20State extends State<Screen20> {
   void setData() async {
     ref!
         .child(screenName)
-        .child("question_39")
+        .child("question_57")
         .child("response")
         .get()
         .then((snapshot) {
@@ -284,24 +250,12 @@ class _Screen20State extends State<Screen20> {
         values.forEach((key, value) {
           print(key);
           int p = -1;
-          if (SectionC.SECTION_C_QUESTION_39_OPTION_1 == key) {
+          if (SectionD.SECTION_D_QUESTION_57_POINT_1 == key) {
             p = 1;
-          } else if (SectionC.SECTION_C_QUESTION_39_OPTION_2 == key) {
+          } else if (SectionD.SECTION_D_QUESTION_57_POINT_2 == key) {
             p = 2;
-          } else if (SectionC.SECTION_C_QUESTION_39_OPTION_3 == key) {
+          } else if (SectionD.SECTION_D_QUESTION_57_POINT_3 == key) {
             p = 3;
-          } else if (SectionC.SECTION_C_QUESTION_39_OPTION_4 == key) {
-            p = 4;
-          } else if (SectionC.SECTION_C_QUESTION_39_OPTION_5 == key) {
-            p = 5;
-          } else if (SectionC.SECTION_C_QUESTION_39_OPTION_6 == key) {
-            p = 6;
-          } else if (SectionC.SECTION_C_QUESTION_39_OPTION_7 == key) {
-            p = 7;
-          } else if (SectionC.SECTION_C_QUESTION_39_OPTION_8 == key) {
-            p = 8;
-          } else if (SectionC.SECTION_C_QUESTION_39_OPTION_9 == key) {
-            p = 9;
           }
           if (p > -1) {
             response[p] = value;
@@ -310,9 +264,44 @@ class _Screen20State extends State<Screen20> {
       } else {
         print('No data available');
       }
-      setState(() {
-        isLoading = false;
-      });
+    });
+
+    ref!
+        .child(screenName)
+        .child("question_59")
+        .child("response")
+        .get()
+        .then((snapshot) {
+      if (snapshot.exists) {
+        Map<dynamic, dynamic> values = snapshot.value as Map<dynamic, dynamic>;
+        values.forEach((key, value) {
+          print(key);
+          int p = -1;
+          if (SectionD.SECTION_D_QUESTION_59_PROPERTY_1 == key) {
+            p = 1;
+          } else if (SectionD.SECTION_D_QUESTION_59_PROPERTY_2 == key) {
+            p = 2;
+          }
+          if (p == 1) {
+            question1Controller.text = value;
+          } else if (p == 2) {
+            question2Controller.text = value;
+          }
+        });
+      } else {
+        print('No data available');
+      }
+    });
+
+    final res3 = await ref!
+        .child(screenName)
+        .child("question_58")
+        .child("response")
+        .get();
+
+    setState(() {
+      response2 = null == res3.value ? "" : res3.value.toString();
+      isLoading = false;
     });
   }
 
@@ -323,18 +312,23 @@ class _Screen20State extends State<Screen20> {
   void syncData(BuildContext context) async {
     await ref!.update({
       screenName: {
-        "question_39": {
-          "question": SectionC.SECTION_C_QUESTION_39,
+        "question_57": {
+          "question": SectionD.SECTION_D_QUESTION_57,
           "response": {
-            SectionC.SECTION_C_QUESTION_39_OPTION_1: response[1],
-            SectionC.SECTION_C_QUESTION_39_OPTION_2: response[2],
-            SectionC.SECTION_C_QUESTION_39_OPTION_3: response[3],
-            SectionC.SECTION_C_QUESTION_39_OPTION_4: response[4],
-            SectionC.SECTION_C_QUESTION_39_OPTION_5: response[5],
-            SectionC.SECTION_C_QUESTION_39_OPTION_6: response[6],
-            SectionC.SECTION_C_QUESTION_39_OPTION_7: response[7],
-            SectionC.SECTION_C_QUESTION_39_OPTION_8: response[8],
-            SectionC.SECTION_C_QUESTION_39_OPTION_9: response[9],
+            SectionD.SECTION_D_QUESTION_57_POINT_1: response[1],
+            SectionD.SECTION_D_QUESTION_57_POINT_2: response[2],
+            SectionD.SECTION_D_QUESTION_57_POINT_3: response[3],
+          }
+        },
+        "question_58": {
+          "question": SectionD.SECTION_D_QUESTION_58,
+          "response": response2
+        },
+        "question_59": {
+          "question": SectionD.SECTION_D_QUESTION_59,
+          "response": {
+            SectionD.SECTION_D_QUESTION_59_PROPERTY_1: question1Controller.text,
+            SectionD.SECTION_D_QUESTION_59_PROPERTY_2: question2Controller.text,
           }
         },
       }
