@@ -30,8 +30,13 @@ class _Screen1State extends State<Screen1> {
   void initialize() async {
     _sharedPreferences = await SharedPreferences.getInstance();
     userId = _sharedPreferences!.getString(Constants.USER_ID);
+    print("User Id : ${userId!}");
     ref = FirebaseDatabase.instance.ref('forms/${userId!}/1/section_b');
     setData();
+  }
+
+  navigateToPreviousScreen(BuildContext context) {
+    Navigator.of(context).pop();
   }
 
   @override
@@ -52,7 +57,7 @@ class _Screen1State extends State<Screen1> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   InkWell(
-                    onTap: () => {},
+                    onTap: () => navigateToPreviousScreen(context),
                     child: Image.asset(
                       'assets/icons/ic_back.png',
                       fit: BoxFit.cover,

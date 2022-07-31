@@ -43,6 +43,10 @@ class _Screen12State extends State<Screen12> {
     _response4 = value;
   }
 
+  navigateToPreviousScreen(BuildContext context) {
+    Navigator.of(context).pop();
+  }
+
   @override
   Widget build(BuildContext context) {
     if (isLoading) {
@@ -65,7 +69,7 @@ class _Screen12State extends State<Screen12> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       InkWell(
-                        onTap: () => {},
+                        onTap: () => navigateToPreviousScreen(context),
                         child: Image.asset(
                           'assets/icons/ic_back.png',
                           fit: BoxFit.cover,

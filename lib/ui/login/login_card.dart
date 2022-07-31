@@ -96,6 +96,8 @@ class _LoginCardState extends State<LoginCard> {
                       ),
                     );
                     return;
+                  } else {
+                    navigateToNextScreen(context);
                   }
                 },
                 color: const Color(0xFFD1D0BD),
@@ -156,5 +158,9 @@ class _LoginCardState extends State<LoginCard> {
         ),
       ),
     );
+  }
+
+  navigateToNextScreen(BuildContext context) {
+    Navigator.of(context).popAndPushNamed('/home');
   }
 }

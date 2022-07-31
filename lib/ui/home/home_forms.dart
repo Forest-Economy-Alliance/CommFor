@@ -1,36 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:ifri/services/auth_service/firebase_auth_impl.dart';
-import 'package:ifri/ui/home/home_forms.dart';
-import 'package:ifri/ui/login/login_page.dart';
 import 'package:provider/provider.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:ifri/constants/constants.dart';
+import 'package:ifri/ui/section_b/screen1.dart';
+import 'package:ifri/ui/section_c/screen12.dart';
+import 'package:ifri/ui/section_d/screen29.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+class HomeForms extends StatefulWidget {
+  const HomeForms({Key? key}) : super(key: key);
 
   @override
-  _HomePageState createState() => _HomePageState();
+  _HomeFormsState createState() => _HomeFormsState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomeFormsState extends State<HomeForms> {
   late FirebaseAuthService authService;
-  SharedPreferences? _sharedPreferences;
   @override
   void initState() {
     super.initState();
     authService = context.read<FirebaseAuthService>();
-    initialize();
-  }
-
-  void initialize() async {
-    _sharedPreferences = await SharedPreferences.getInstance();
-    final FirebaseAuth auth = FirebaseAuth.instance;
-    final User? user = auth.currentUser;
-    final uid = user?.uid;
-    print("UID : " + uid!);
-    _sharedPreferences?.setString(Constants.USER_ID, uid);
   }
 
   @override
@@ -50,20 +37,6 @@ class _HomePageState extends State<HomePage> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  InkWell(
-                    onTap: () => _signOut(context),
-                    child: Image.asset(
-                      'assets/icons/ic_logout.png',
-                      fit: BoxFit.cover,
-                      width: 25,
-                      height: 25,
-                    ),
-                  ),
-                ],
-              ),
-              Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Container(
@@ -82,22 +55,16 @@ class _HomePageState extends State<HomePage> {
                 width: 250,
                 height: 75,
                 decoration: BoxDecoration(
-                  color: const Color(0xFF12160F),
+                  color: const Color(0xFF505921),
                   borderRadius: BorderRadius.circular(13),
                 ),
                 child: InkWell(
-                  onTap: () => navigateToCapture(context),
+                  onTap: () => navigateToSectionB(context),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Image.asset(
-                        'assets/icons/ic_capture.png',
-                        fit: BoxFit.cover,
-                        width: 35,
-                        height: 35,
-                      ),
-                      const Text(
-                        'Capture',
+                    children: const [
+                      Text(
+                        'Section B',
                         textAlign: TextAlign.center,
                         style: TextStyle(fontSize: 22, color: Colors.white),
                       ),
@@ -116,18 +83,12 @@ class _HomePageState extends State<HomePage> {
                   borderRadius: BorderRadius.circular(13),
                 ),
                 child: InkWell(
-                  onTap: () => navigateToVisualize(context),
+                  onTap: () => navigateToSectionC(context),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Image.asset(
-                        'assets/icons/ic_visualize.png',
-                        fit: BoxFit.cover,
-                        width: 35,
-                        height: 35,
-                      ),
-                      const Text(
-                        'Visualize',
+                    children: const [
+                      Text(
+                        'Section C',
                         textAlign: TextAlign.center,
                         style: TextStyle(fontSize: 22, color: Colors.white),
                       ),
@@ -142,22 +103,16 @@ class _HomePageState extends State<HomePage> {
                 width: 250,
                 height: 75,
                 decoration: BoxDecoration(
-                  color: const Color(0xFF7D893B),
+                  color: const Color(0xFF505921),
                   borderRadius: BorderRadius.circular(13),
                 ),
                 child: InkWell(
-                  onTap: () => navigateToDiscuss(context),
+                  onTap: () => navigateToSectionD(context),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Image.asset(
-                        'assets/icons/ic_discuss.png',
-                        fit: BoxFit.fill,
-                        width: 35,
-                        height: 35,
-                      ),
-                      const Text(
-                        'Discuss',
+                    children: const [
+                      Text(
+                        'Section D',
                         textAlign: TextAlign.center,
                         style: TextStyle(fontSize: 22, color: Colors.white),
                       ),
@@ -172,26 +127,31 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  navigateToVisualize(BuildContext context) {
+  navigateToSectionB(BuildContext context) {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (_) {
-          return const HomeForms();
+          return const Screen1();
         },
       ),
     );
   }
 
-  navigateToCapture(BuildContext context) {}
-
-  navigateToDiscuss(BuildContext context) {}
-
-  Future<void> _signOut(BuildContext context) async {
-    await FirebaseAuth.instance.signOut();
+  navigateToSectionC(BuildContext context) {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (_) {
-          return const LoginPage();
+          return const Screen12();
+        },
+      ),
+    );
+  }
+
+  navigateToSectionD(BuildContext context) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) {
+          return const Screen29();
         },
       ),
     );

@@ -1,8 +1,13 @@
 import 'dart:ui';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:ifri/services/auth_service/firebase_auth_impl.dart';
+import 'package:ifri/ui/home/home_page.dart';
 import 'package:provider/provider.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:ifri/constants/constants.dart';
 
 class RegistrationCard extends StatefulWidget {
   const RegistrationCard({Key? key}) : super(key: key);
@@ -13,11 +18,17 @@ class RegistrationCard extends StatefulWidget {
 
 class _RegistrationCardState extends State<RegistrationCard> {
   late FirebaseAuthService authService;
+  DatabaseReference ref = FirebaseDatabase.instance.ref('userDetails');
+  SharedPreferences? _sharedPreferences;
 
   @override
   void initState() {
     super.initState();
     authService = context.read<FirebaseAuthService>();
+  }
+
+  void initialize() async {
+    _sharedPreferences = await SharedPreferences.getInstance();
   }
 
   TextEditingController emailController = TextEditingController();
@@ -120,7 +131,7 @@ class _RegistrationCardState extends State<RegistrationCard> {
                   borderRadius: BorderRadius.circular(15),
                 ),
                 child: TextField(
-                  controller: emailController,
+                  controller: orgNameController,
                   keyboardType: TextInputType.emailAddress,
                   style: const TextStyle(
                     color: Color(0xFFD1D0BD),
@@ -149,6 +160,10 @@ class _RegistrationCardState extends State<RegistrationCard> {
                         ),
                       ),
                     );
+                    print("sddssd");
+                  } else {
+                    print("sddssddd");
+                    syncData(context);
                   }
                 },
                 color: const Color(0xFFD1D0BD),
@@ -204,5 +219,17 @@ class _RegistrationCardState extends State<RegistrationCard> {
         ),
       ),
     );
+  }
+
+  void syncData(BuildContext context) async {
+    await ref.push().update({
+      "email": emailController.text,
+      "username": usernameController.text,
+      "organization": orgNameController.text,
+    }).whenComplete(() => navigateToNextScreen(context));
+  }
+
+  navigateToNextScreen(BuildContext context) {
+    Navigator.of(context).popAndPushNamed('/home');
   }
 }

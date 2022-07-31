@@ -1,18 +1,27 @@
 {
   "project_info": {
     "project_number": "862872272959",
+    "firebase_url": "https://ifri-23ae3-default-rtdb.firebaseio.com",
     "project_id": "ifri-23ae3",
     "storage_bucket": "ifri-23ae3.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:862872272959:android:bc09da9198aa13acb6788a",
+        "mobilesdk_app_id": "1:862872272959:android:c4cb97c7fd60b4bcb6788a",
         "android_client_info": {
-          "package_name": "com.example.ifri"
+          "package_name": "com.mangoes.ifri"
         }
       },
       "oauth_client": [
+        {
+          "client_id": "862872272959-dp8ed6mq9tio86nhsop3elm3fi84hg5g.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mangoes.ifri",
+            "certificate_hash": "7b71ec583eaaccd443af686511caa3ced42b6be8"
+          }
+        },
         {
           "client_id": "862872272959-dq5h7202dlbr5ur2lhmljeq63t3kjli3.apps.googleusercontent.com",
           "client_type": 3
