@@ -26,9 +26,15 @@ class DefaultFirebaseOptions {
       case TargetPlatform.android:
         return android;
       case TargetPlatform.iOS:
-        return ios;
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for ios - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
       case TargetPlatform.macOS:
-        return macos;
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for macos - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
       case TargetPlatform.windows:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for windows - '
@@ -47,30 +53,11 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyDkkbU5Nh8ONAAfQBaOY1q7UMJ4drgixH4',
-    appId: '1:862872272959:android:bc09da9198aa13acb6788a',
-    messagingSenderId: '862872272959',
-    projectId: 'ifri-23ae3',
-    storageBucket: 'ifri-23ae3.appspot.com',
-  );
-
-  static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyBa5pKjYwftAAH4RKuWix55KwrDzaco5rE',
-    appId: '1:862872272959:ios:aacafb4b3bdb9917b6788a',
-    messagingSenderId: '862872272959',
-    projectId: 'ifri-23ae3',
-    storageBucket: 'ifri-23ae3.appspot.com',
-    iosClientId: '862872272959-u9s15bod6pl5lb7r4vgsd4112ftvk2tn.apps.googleusercontent.com',
-    iosBundleId: 'com.example.ifri',
-  );
-
-  static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyBa5pKjYwftAAH4RKuWix55KwrDzaco5rE',
-    appId: '1:862872272959:ios:aacafb4b3bdb9917b6788a',
-    messagingSenderId: '862872272959',
-    projectId: 'ifri-23ae3',
-    storageBucket: 'ifri-23ae3.appspot.com',
-    iosClientId: '862872272959-u9s15bod6pl5lb7r4vgsd4112ftvk2tn.apps.googleusercontent.com',
-    iosBundleId: 'com.example.ifri',
+    apiKey: 'AIzaSyD-Tg5a7d39Er9RSGEZj1_FB_s_anz_gaA',
+    appId: '1:191546066082:android:32ecd1d129d20275d483fb',
+    messagingSenderId: '191546066082',
+    projectId: 'commfor-backend',
+    databaseURL: 'https://commfor-backend-default-rtdb.asia-southeast1.firebasedatabase.app',
+    storageBucket: 'commfor-backend.appspot.com',
   );
 }

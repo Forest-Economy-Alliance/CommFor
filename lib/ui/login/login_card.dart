@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:ifri/services/auth_service/firebase_auth_impl.dart';
+import 'package:ifri/ui/login/forgot_password_page.dart';
 import 'package:ifri/ui/login/registration_page.dart';
 import 'package:provider/provider.dart';
 
@@ -96,8 +97,6 @@ class _LoginCardState extends State<LoginCard> {
                       ),
                     );
                     return;
-                  } else {
-                    navigateToNextScreen(context);
                   }
                 },
                 color: const Color(0xFFD1D0BD),
@@ -117,7 +116,14 @@ class _LoginCardState extends State<LoginCard> {
                 ),
               ),
               TextButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const ForgotPasswordPage(),
+                    ),
+                  );
+                },
                 child: const Text(
                   "Forgot your password?",
                   style: TextStyle(
@@ -158,9 +164,5 @@ class _LoginCardState extends State<LoginCard> {
         ),
       ),
     );
-  }
-
-  navigateToNextScreen(BuildContext context) {
-    Navigator.of(context).popAndPushNamed('/home');
   }
 }

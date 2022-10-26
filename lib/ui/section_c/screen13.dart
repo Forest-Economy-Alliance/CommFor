@@ -1,15 +1,15 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:ifri/constants/constants.dart';
 import 'package:ifri/constants/section_c.dart';
 import 'package:ifri/style/custom_button.dart';
 import 'package:ifri/style/custom_style.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ifri/ui/section_c/screen14.dart';
+import 'package:ifri/services/auth_service/firebase_auth_impl.dart';
+import 'package:provider/provider.dart';
 
 class Screen13 extends StatefulWidget {
-  const Screen13({Key? key}) : super(key: key);
-
+  const Screen13({Key? key, required this.formName}) : super(key: key);
+  final String formName;
   @override
   State<Screen13> createState() => _Screen13State();
 }
@@ -22,159 +22,167 @@ class _Screen13State extends State<Screen13> {
   TextEditingController question20cController = TextEditingController();
 
   String screenName = "screen_13";
-  SharedPreferences? _sharedPreferences;
+
   String? userId;
+
+  late FirebaseAuthService authService;
 
   @override
   void initState() {
     super.initState();
+    authService = context.read<FirebaseAuthService>();
+
     initialize();
   }
 
   void initialize() async {
-    _sharedPreferences = await SharedPreferences.getInstance();
-    userId = _sharedPreferences!.getString(Constants.USER_ID);
-    ref = FirebaseDatabase.instance.ref('forms/${userId!}/1/section_c');
+    userId = authService.user!.uid;
+
+    ref = FirebaseDatabase.instance
+        .ref('forms/${userId!}/${widget.formName}/section_c');
     setData();
   }
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-        child: Scaffold(
-      body: ColoredBox(
-        color: const Color(0xFF12160F),
-        child: Padding(
-          padding: const EdgeInsets.only(
-              left: 10.0, right: 10.0, top: 5.0, bottom: 5.0),
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    InkWell(
-                      onTap: () => {},
-                      child: Image.asset(
-                        'assets/icons/ic_back.png',
-                        fit: BoxFit.cover,
-                        width: 20,
-                        height: 20,
-                      ),
-                    ),
-                    Container(
-                      margin: const EdgeInsets.symmetric(
-                          horizontal: 20, vertical: 10),
-                      child: const Text(
-                        SectionC.SECTION_C_SECTION_2,
-                        style: CustomStyle.screenTitle,
-                      ),
-                    ),
-                    InkWell(
-                      onTap: () => {},
-                      child: Image.asset(
-                        'assets/icons/ic_close.png',
-                        fit: BoxFit.cover,
-                        width: 30,
-                        height: 30,
-                      ),
-                    ),
-                  ],
-                ),
-                Container(
-                  alignment: Alignment.center,
-                  child: const SizedBox(
-                      height: 20,
-                      width: 300,
-                      child: Divider(color: Color(0xffD1D0BD))),
-                ),
-                Padding(
-                  padding:
-                      const EdgeInsets.only(left: 10.0, right: 10.0, top: 25.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+      child: Scaffold(
+        body: ColoredBox(
+          color: const Color(0xFF12160F),
+          child: Padding(
+            padding: const EdgeInsets.only(
+                left: 10.0, right: 10.0, top: 5.0, bottom: 5.0),
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      const Text(SectionC.SECTION_C_QUESTION_19,
-                          style: CustomStyle.questionTitle),
-                      const SizedBox(
-                        height: 20,
+                      InkWell(
+                        onTap: () => {},
+                        child: Image.asset(
+                          'assets/icons/ic_back.png',
+                          fit: BoxFit.cover,
+                          width: 20,
+                          height: 20,
+                        ),
                       ),
-                      TextField(
-                          controller: question19Controller,
-                          style: CustomStyle.answer,
-                          textAlign: TextAlign.start,
-                          decoration: CustomStyle.answerInputDecoration),
-                      const SizedBox(
-                        height: 40,
+                      Container(
+                        margin: const EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 10),
+                        child: const Text(
+                          SectionC.SECTION_C_SECTION_2,
+                          style: CustomStyle.screenTitle,
+                        ),
                       ),
-                      const Text(SectionC.SECTION_C_QUESTION_20,
-                          style: CustomStyle.questionTitle),
-                      const SizedBox(
-                        height: 20,
+                      InkWell(
+                        onTap: () => {},
+                        child: Image.asset(
+                          'assets/icons/ic_close.png',
+                          fit: BoxFit.cover,
+                          width: 30,
+                          height: 30,
+                        ),
                       ),
-                      const Text("(1) Men ", style: CustomStyle.questionTitle),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      TextField(
-                          controller: question20aController,
-                          style: CustomStyle.answer,
-                          textAlign: TextAlign.start,
-                          decoration: CustomStyle.answerInputDecoration),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      const Text("(2) Women", style: CustomStyle.questionTitle),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      TextField(
-                          controller: question20bController,
-                          style: CustomStyle.answer,
-                          textAlign: TextAlign.start,
-                          decoration: CustomStyle.answerInputDecoration),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      const Text("(3) Children (<14 years)",
-                          style: CustomStyle.questionTitle),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      TextField(
-                          controller: question20cController,
-                          style: CustomStyle.answer,
-                          textAlign: TextAlign.start,
-                          decoration: CustomStyle.answerInputDecoration),
                     ],
                   ),
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    InkWell(
-                        onTap: () => syncData(context),
-                        splashColor: Colors.lightBlue,
-                        borderRadius: BorderRadius.circular(2),
-                        child: CustomButton.nextButton),
-                  ],
-                ),
-                const SizedBox(
-                  height: 100,
-                ),
-              ],
+                  Container(
+                    alignment: Alignment.center,
+                    child: const SizedBox(
+                        height: 20,
+                        width: 300,
+                        child: Divider(color: Color(0xffD1D0BD))),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(
+                        left: 10.0, right: 10.0, top: 25.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(SectionC.SECTION_C_QUESTION_19,
+                            style: CustomStyle.questionTitle),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        TextField(
+                            controller: question19Controller,
+                            style: CustomStyle.answer,
+                            textAlign: TextAlign.start,
+                            decoration: CustomStyle.answerInputDecoration),
+                        const SizedBox(
+                          height: 40,
+                        ),
+                        const Text(SectionC.SECTION_C_QUESTION_20,
+                            style: CustomStyle.questionTitle),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        const Text("(1) Men ",
+                            style: CustomStyle.questionTitle),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        TextField(
+                            controller: question20aController,
+                            style: CustomStyle.answer,
+                            textAlign: TextAlign.start,
+                            decoration: CustomStyle.answerInputDecoration),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        const Text("(2) Women",
+                            style: CustomStyle.questionTitle),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        TextField(
+                            controller: question20bController,
+                            style: CustomStyle.answer,
+                            textAlign: TextAlign.start,
+                            decoration: CustomStyle.answerInputDecoration),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        const Text("(3) Children (<14 years)",
+                            style: CustomStyle.questionTitle),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        TextField(
+                            controller: question20cController,
+                            style: CustomStyle.answer,
+                            textAlign: TextAlign.start,
+                            decoration: CustomStyle.answerInputDecoration),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      InkWell(
+                          onTap: () => syncData(context),
+                          splashColor: Colors.lightBlue,
+                          borderRadius: BorderRadius.circular(2),
+                          child: CustomButton.nextButton),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 100,
+                  ),
+                ],
+              ),
             ),
           ),
         ),
       ),
-    ));
+    );
   }
 
   void setData() async {
@@ -237,7 +245,7 @@ class _Screen13State extends State<Screen13> {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (_) {
-          return const Screen14();
+          return Screen14(formName: widget.formName);
         },
       ),
     );

@@ -41,7 +41,7 @@ class _LoginWrapperState extends State<LoginWrapper> {
     return StreamBuilder<User?>(
       stream: authService.authStream,
       builder: (context, snapshot) {
-        if (snapshot.hasData && snapshot.data != null) {
+        if (snapshot.data != null) {
           return const HomePage();
         }
         return const LoginPage();

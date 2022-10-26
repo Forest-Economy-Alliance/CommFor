@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:ifri/constants/constants.dart';
 import 'package:ifri/constants/section_b.dart';
 import 'package:ifri/style/custom_button.dart';
 import 'package:ifri/style/custom_option.dart';
@@ -13,10 +12,12 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:ifri/services/auth_service/firebase_auth_impl.dart';
+import 'package:provider/provider.dart';
 
 class Screen9 extends StatefulWidget {
-  const Screen9({Key? key}) : super(key: key);
-
+  const Screen9({Key? key, required this.formName}) : super(key: key);
+  final String formName;
   @override
   State<Screen9> createState() => _Screen9State();
 }
@@ -30,10 +31,14 @@ class _Screen9State extends State<Screen9> {
   bool isLoading = true;
   TextEditingController response1Controller = TextEditingController();
   TextEditingController response2Controller = TextEditingController();
-  SharedPreferences? _sharedPreferences;
+
+  late FirebaseAuthService authService;
+
   @override
   void initState() {
     super.initState();
+    authService = context.read<FirebaseAuthService>();
+
     initializeData(context);
   }
 
@@ -48,181 +53,182 @@ class _Screen9State extends State<Screen9> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-        child: Scaffold(
-      body: SingleChildScrollView(
-        child: ColoredBox(
-          color: const Color(0xFF12160F),
-          child: Padding(
-            padding: const EdgeInsets.only(
-                left: 10.0, right: 10.0, top: 5.0, bottom: 5.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    InkWell(
-                      onTap: () => {navigateToPreviousScreen(context)},
-                      child: Image.asset(
-                        'assets/icons/ic_back.png',
-                        fit: BoxFit.cover,
-                        width: 20,
+      child: Scaffold(
+        body: SingleChildScrollView(
+          child: ColoredBox(
+            color: const Color(0xFF12160F),
+            child: Padding(
+              padding: const EdgeInsets.only(
+                  left: 10.0, right: 10.0, top: 5.0, bottom: 5.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      InkWell(
+                        onTap: () => {navigateToPreviousScreen(context)},
+                        child: Image.asset(
+                          'assets/icons/ic_back.png',
+                          fit: BoxFit.cover,
+                          width: 20,
+                          height: 20,
+                        ),
+                      ),
+                      Container(
+                        margin: const EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 10),
+                        child: const Text(
+                          SectionB.SECTION_B_SECTION_4,
+                          style: CustomStyle.screenTitle,
+                        ),
+                      ),
+                      InkWell(
+                        onTap: () => {},
+                        child: Image.asset(
+                          'assets/icons/ic_close.png',
+                          fit: BoxFit.cover,
+                          width: 30,
+                          height: 30,
+                        ),
+                      ),
+                    ],
+                  ),
+                  Column(
+                    children: [
+                      Container(
+                        alignment: Alignment.center,
+                        child: const SizedBox(
+                            height: 20,
+                            width: 300,
+                            child: Divider(color: Color(0xffD1D0BD))),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                            left: 10.0, right: 10.0, top: 25.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(SectionB.SECTION_B_QUESTION_11,
+                                style: CustomStyle.questionTitle),
+                            const SizedBox(
+                              height: 15,
+                            ),
+                            const Text("Local Name", style: CustomStyle.form),
+                            const SizedBox(
+                              height: 15,
+                            ),
+                            TextField(
+                                controller: response1Controller,
+                                style: CustomStyle.form,
+                                textAlign: TextAlign.start,
+                                decoration: CustomStyle.answerInputDecoration),
+                            const SizedBox(
+                              height: 15,
+                            ),
+                            const Text("Bot. Name", style: CustomStyle.form),
+                            const SizedBox(
+                              height: 15,
+                            ),
+                            TextField(
+                                controller: response2Controller,
+                                style: CustomStyle.form,
+                                textAlign: TextAlign.start,
+                                decoration: CustomStyle.answerInputDecoration),
+                            const SizedBox(
+                              height: 15,
+                            ),
+                            Column(
+                              children: [
+                                Row(
+                                  children: [
+                                    const SizedBox(
+                                      width: 125,
+                                      child: Text("Self-Consumption",
+                                          style: CustomStyle.answer),
+                                    ),
+                                    CustomOption.yesNoButtonP(setSelf),
+                                  ],
+                                ),
+                                Row(
+                                  children: [
+                                    const SizedBox(
+                                      width: 125,
+                                      child: Text("Market Sale",
+                                          style: CustomStyle.answer),
+                                    ),
+                                    CustomOption.yesNoButtonP(setMarket),
+                                  ],
+                                ),
+                              ],
+                            )
+                          ],
+                        ),
+                      ),
+                      const SizedBox(
                         height: 20,
                       ),
-                    ),
-                    Container(
-                      margin: const EdgeInsets.symmetric(
-                          horizontal: 20, vertical: 10),
-                      child: const Text(
-                        SectionB.SECTION_B_SECTION_4,
-                        style: CustomStyle.screenTitle,
-                      ),
-                    ),
-                    InkWell(
-                      onTap: () => {},
-                      child: Image.asset(
-                        'assets/icons/ic_close.png',
-                        fit: BoxFit.cover,
-                        width: 30,
-                        height: 30,
-                      ),
-                    ),
-                  ],
-                ),
-                Column(
-                  children: [
-                    Container(
-                      alignment: Alignment.center,
-                      child: const SizedBox(
-                          height: 20,
-                          width: 300,
-                          child: Divider(color: Color(0xffD1D0BD))),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                          left: 10.0, right: 10.0, top: 25.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          const Text(SectionB.SECTION_B_QUESTION_11,
-                              style: CustomStyle.questionTitle),
-                          const SizedBox(
-                            height: 15,
-                          ),
-                          const Text("Local Name", style: CustomStyle.form),
-                          const SizedBox(
-                            height: 15,
-                          ),
-                          TextField(
-                              controller: response1Controller,
-                              style: CustomStyle.form,
-                              textAlign: TextAlign.start,
-                              decoration: CustomStyle.answerInputDecoration),
-                          const SizedBox(
-                            height: 15,
-                          ),
-                          const Text("Bot. Name", style: CustomStyle.form),
-                          const SizedBox(
-                            height: 15,
-                          ),
-                          TextField(
-                              controller: response2Controller,
-                              style: CustomStyle.form,
-                              textAlign: TextAlign.start,
-                              decoration: CustomStyle.answerInputDecoration),
-                          const SizedBox(
-                            height: 15,
-                          ),
-                          Column(
-                            children: [
-                              Row(
-                                children: [
-                                  const SizedBox(
-                                    width: 125,
-                                    child: Text("Self-Consumption",
-                                        style: CustomStyle.answer),
-                                  ),
-                                  CustomOption.yesNoButtonP(setSelf),
-                                ],
-                              ),
-                              Row(
-                                children: [
-                                  const SizedBox(
-                                    width: 125,
-                                    child: Text("Market Sale",
-                                        style: CustomStyle.answer),
-                                  ),
-                                  CustomOption.yesNoButtonP(setMarket),
-                                ],
-                              ),
-                            ],
-                          )
+                          InkWell(
+                              onTap: () => _pickImage(context),
+                              splashColor: Colors.lightBlue,
+                              borderRadius: BorderRadius.circular(2),
+                              child: CustomButton.uploadPictureButton),
                         ],
                       ),
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        InkWell(
-                            onTap: () => _pickImage(context),
-                            splashColor: Colors.lightBlue,
-                            borderRadius: BorderRadius.circular(2),
-                            child: CustomButton.uploadPictureButton),
-                      ],
-                    ),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        InkWell(
-                            onTap: () => addData(context),
-                            splashColor: Colors.lightBlue,
-                            borderRadius: BorderRadius.circular(2),
-                            child: CustomButton.addMoreButton),
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 15,
-                    ),
-                    _count > 0
-                        ? Text("$_count records submitted successfully",
-                            style: CustomStyle.optionYesNo)
-                        : Container(),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        InkWell(
-                            onTap: () => syncData(context),
-                            splashColor: Colors.lightBlue,
-                            borderRadius: BorderRadius.circular(2),
-                            child: CustomButton.nextButton),
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 200,
-                    )
-                  ],
-                ),
-              ],
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          InkWell(
+                              onTap: () => addData(context),
+                              splashColor: Colors.lightBlue,
+                              borderRadius: BorderRadius.circular(2),
+                              child: CustomButton.addMoreButton),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 15,
+                      ),
+                      _count > 0
+                          ? Text("$_count records submitted successfully",
+                              style: CustomStyle.optionYesNo)
+                          : Container(),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          InkWell(
+                              onTap: () => syncData(context),
+                              splashColor: Colors.lightBlue,
+                              borderRadius: BorderRadius.circular(2),
+                              child: CustomButton.nextButton),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 200,
+                      )
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         ),
       ),
-    ));
+    );
   }
 
   navigateToNextScreen(BuildContext context) {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (_) {
-          return const Screen10();
+          return Screen10(formName: widget.formName);
         },
       ),
     );
@@ -233,9 +239,10 @@ class _Screen9State extends State<Screen9> {
   }
 
   void initializeData(BuildContext context) async {
-    _sharedPreferences = await SharedPreferences.getInstance();
-    userId = _sharedPreferences!.getString(Constants.USER_ID)!;
-    ref = FirebaseDatabase.instance.ref('forms/$userId/1/section_b');
+    userId = authService.user!.uid;
+
+    ref = FirebaseDatabase.instance
+        .ref('forms/$userId/${widget.formName}/section_b');
     await ref!.child(screenName).child("question_11").update({
       "question": SectionB.SECTION_B_QUESTION_11,
     });

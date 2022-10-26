@@ -5,12 +5,12 @@ import 'package:ifri/style/custom_option.dart';
 import 'package:ifri/style/custom_style.dart';
 import 'package:ifri/ui/section_b/screen11.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:ifri/constants/constants.dart';
+import 'package:ifri/services/auth_service/firebase_auth_impl.dart';
+import 'package:provider/provider.dart';
 
 class Screen10 extends StatefulWidget {
-  const Screen10({Key? key}) : super(key: key);
-
+  const Screen10({Key? key, required this.formName}) : super(key: key);
+  final String formName;
   @override
   State<Screen10> createState() => _Screen10State();
 }
@@ -20,19 +20,28 @@ class _Screen10State extends State<Screen10> {
   String screenName = "screen_10";
   bool isLoading = true;
   Map<int, String> response = {};
-  SharedPreferences? _sharedPreferences;
   String? userId;
+
+  late FirebaseAuthService authService;
+  TextEditingController response3Controller = TextEditingController();
+  TextEditingController response8Controller = TextEditingController();
+  TextEditingController response13Controller = TextEditingController();
+  TextEditingController response18Controller = TextEditingController();
+  TextEditingController response23Controller = TextEditingController();
+  TextEditingController response28Controller = TextEditingController();
 
   @override
   void initState() {
     super.initState();
+    authService = context.read<FirebaseAuthService>();
     initialize();
   }
 
   void initialize() async {
-    _sharedPreferences = await SharedPreferences.getInstance();
-    userId = _sharedPreferences!.getString(Constants.USER_ID);
-    ref = FirebaseDatabase.instance.ref('forms/${userId!}/1/section_b');
+    userId = authService.user!.uid;
+
+    ref = FirebaseDatabase.instance
+        .ref('forms/${userId!}/${widget.formName}/section_b');
     setData();
   }
 
@@ -115,487 +124,691 @@ class _Screen10State extends State<Screen10> {
                   ),
                   SizedBox(
                     height: 250,
-                    child: Row(children: [
-                      const SizedBox(
-                          width: 75,
-                          child: Text("Timber", style: CustomStyle.answer)),
-                      const SizedBox(width: 2),
-                      const VerticalDivider(
-                        color: Color(0xffD1D0BD),
-                        thickness: 0.5,
-                      ),
-                      const SizedBox(width: 2),
-                      Column(
-                        children: [
-                          Row(
-                            children: [
-                              const SizedBox(
-                                width: 125,
-                                height: 50,
-                                child: Text("HH – Self consumption",
-                                    style: CustomStyle.answer),
-                              ),
-                              CustomOption.yesNoButtons(
-                                  1, response[1], setResponse),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              const SizedBox(
-                                width: 125,
-                                height: 50,
-                                child: Text("HH – Market sale",
-                                    style: CustomStyle.answer),
-                              ),
-                              CustomOption.yesNoButtons(
-                                  2, response[2], setResponse),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              const SizedBox(
-                                width: 125,
-                                height: 50,
-                                child: Text("Price per unit",
-                                    style: CustomStyle.answer),
-                              ),
-                              CustomOption.yesNoButtons(
-                                  3, response[3], setResponse),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              const SizedBox(
-                                width: 125,
-                                height: 50,
-                                child: Text("Collection by other sites",
-                                    style: CustomStyle.answer),
-                              ),
-                              CustomOption.yesNoButtons(
-                                  4, response[4], setResponse),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              const SizedBox(
-                                width: 125,
-                                height: 50,
-                                child: Text("Harvesting rights of other sites",
-                                    style: CustomStyle.answer),
-                              ),
-                              CustomOption.yesNoButtons(
-                                  5, response[5], setResponse),
-                            ],
-                          ),
-                        ],
-                      )
-                    ]),
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      physics: const BouncingScrollPhysics(),
+                      child: Row(children: [
+                        const SizedBox(
+                            width: 75,
+                            child: Text("Timber", style: CustomStyle.answer)),
+                        const SizedBox(width: 2),
+                        const VerticalDivider(
+                          color: Color(0xffD1D0BD),
+                          thickness: 0.5,
+                        ),
+                        const SizedBox(width: 2),
+                        Column(
+                          children: [
+                            Row(
+                              children: [
+                                const SizedBox(
+                                  width: 125,
+                                  height: 50,
+                                  child: Text("HH – Self consumption",
+                                      style: CustomStyle.answer),
+                                ),
+                                CustomOption.yesNoButtons(
+                                    1, response[1], setResponse),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                const SizedBox(
+                                  width: 125,
+                                  height: 50,
+                                  child: Text("HH – Market sale",
+                                      style: CustomStyle.answer),
+                                ),
+                                CustomOption.yesNoButtons(
+                                    2, response[2], setResponse),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                const SizedBox(
+                                  width: 130,
+                                  height: 50,
+                                  child: Text(
+                                    "Price per unit",
+                                    style: CustomStyle.answer,
+                                  ),
+                                ),
+                                // Textfield
+                                SizedBox(
+                                  width: 125,
+                                  height: 30,
+                                  child: TextField(
+                                    controller: response3Controller,
+                                    style: CustomStyle.form,
+                                    keyboardType: TextInputType.number,
+                                    textAlign: TextAlign.start,
+                                    decoration: const InputDecoration(
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: Color(0xffD1D0BD),
+                                            width: 1.0),
+                                      ),
+                                      enabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: Color(0xffD1D0BD),
+                                            width: 1.0),
+                                      ),
+                                      contentPadding: EdgeInsets.only(
+                                        // top: 5.0,
+                                        // bottom: 5.0,
+                                        left: 10.0,
+                                        right: 10.0,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                const SizedBox(
+                                  width: 125,
+                                  height: 50,
+                                  child: Text("Collection by other sites",
+                                      style: CustomStyle.answer),
+                                ),
+                                CustomOption.yesNoButtons(
+                                    4, response[4], setResponse),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                const SizedBox(
+                                  width: 125,
+                                  height: 50,
+                                  child: Text(
+                                      "Harvesting rights of other sites",
+                                      style: CustomStyle.answer),
+                                ),
+                                CustomOption.yesNoButtons(
+                                    5, response[5], setResponse),
+                              ],
+                            ),
+                          ],
+                        )
+                      ]),
+                    ),
                   ),
                   const SizedBox(
                     height: 20,
                   ),
                   SizedBox(
                     height: 250,
-                    child: Row(children: [
-                      const SizedBox(
-                          width: 75,
-                          child: Text("Fuelwood", style: CustomStyle.answer)),
-                      const SizedBox(width: 2),
-                      const VerticalDivider(
-                        color: Color(0xffD1D0BD),
-                        thickness: 0.5,
-                      ),
-                      const SizedBox(width: 2),
-                      Column(
-                        children: [
-                          Row(
-                            children: [
-                              const SizedBox(
-                                width: 125,
-                                height: 50,
-                                child: Text("HH – Self consumption",
-                                    style: CustomStyle.answer),
-                              ),
-                              CustomOption.yesNoButtons(
-                                  6, response[6], setResponse),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              const SizedBox(
-                                width: 125,
-                                height: 50,
-                                child: Text("HH – Market sale",
-                                    style: CustomStyle.answer),
-                              ),
-                              CustomOption.yesNoButtons(
-                                  7, response[7], setResponse),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              const SizedBox(
-                                width: 125,
-                                height: 50,
-                                child: Text("Price per unit",
-                                    style: CustomStyle.answer),
-                              ),
-                              CustomOption.yesNoButtons(
-                                  8, response[8], setResponse),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              const SizedBox(
-                                width: 125,
-                                height: 50,
-                                child: Text("Collection by other sites",
-                                    style: CustomStyle.answer),
-                              ),
-                              CustomOption.yesNoButtons(
-                                  9, response[9], setResponse),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              const SizedBox(
-                                width: 125,
-                                height: 50,
-                                child: Text("Harvesting rights of other sites",
-                                    style: CustomStyle.answer),
-                              ),
-                              CustomOption.yesNoButtons(
-                                  10, response[10], setResponse),
-                            ],
-                          ),
-                        ],
-                      )
-                    ]),
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      physics: const BouncingScrollPhysics(),
+                      child: Row(children: [
+                        const SizedBox(
+                            width: 75,
+                            child: Text("Fuelwood", style: CustomStyle.answer)),
+                        const SizedBox(width: 2),
+                        const VerticalDivider(
+                          color: Color(0xffD1D0BD),
+                          thickness: 0.5,
+                        ),
+                        const SizedBox(width: 2),
+                        Column(
+                          children: [
+                            Row(
+                              children: [
+                                const SizedBox(
+                                  width: 125,
+                                  height: 50,
+                                  child: Text("HH – Self consumption",
+                                      style: CustomStyle.answer),
+                                ),
+                                CustomOption.yesNoButtons(
+                                    6, response[6], setResponse),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                const SizedBox(
+                                  width: 125,
+                                  height: 50,
+                                  child: Text("HH – Market sale",
+                                      style: CustomStyle.answer),
+                                ),
+                                CustomOption.yesNoButtons(
+                                    7, response[7], setResponse),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                const SizedBox(
+                                  width: 130,
+                                  height: 50,
+                                  child: Text(
+                                    "Price per unit",
+                                    style: CustomStyle.answer,
+                                  ),
+                                ),
+                                // Textfield
+                                SizedBox(
+                                  width: 125,
+                                  height: 30,
+                                  child: TextField(
+                                    controller: response8Controller,
+                                    style: CustomStyle.form,
+                                    keyboardType: TextInputType.number,
+                                    textAlign: TextAlign.start,
+                                    decoration: const InputDecoration(
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: Color(0xffD1D0BD),
+                                            width: 1.0),
+                                      ),
+                                      enabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: Color(0xffD1D0BD),
+                                            width: 1.0),
+                                      ),
+                                      contentPadding: EdgeInsets.only(
+                                        // top: 5.0,
+                                        // bottom: 5.0,
+                                        left: 10.0,
+                                        right: 10.0,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                const SizedBox(
+                                  width: 125,
+                                  height: 50,
+                                  child: Text("Collection by other sites",
+                                      style: CustomStyle.answer),
+                                ),
+                                CustomOption.yesNoButtons(
+                                    9, response[9], setResponse),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                const SizedBox(
+                                  width: 125,
+                                  height: 50,
+                                  child: Text(
+                                      "Harvesting rights of other sites",
+                                      style: CustomStyle.answer),
+                                ),
+                                CustomOption.yesNoButtons(
+                                    10, response[10], setResponse),
+                              ],
+                            ),
+                          ],
+                        )
+                      ]),
+                    ),
                   ),
                   const SizedBox(
                     height: 20,
                   ),
                   SizedBox(
                     height: 250,
-                    child: Row(children: [
-                      const SizedBox(
-                          width: 75,
-                          child: Text("Grazing", style: CustomStyle.answer)),
-                      const SizedBox(width: 2),
-                      const VerticalDivider(
-                        color: Color(0xffD1D0BD),
-                        thickness: 0.5,
-                      ),
-                      const SizedBox(width: 2),
-                      Column(
-                        children: [
-                          Row(
-                            children: [
-                              const SizedBox(
-                                width: 125,
-                                height: 50,
-                                child: Text("HH – Self consumption",
-                                    style: CustomStyle.answer),
-                              ),
-                              CustomOption.yesNoButtons(
-                                  11, response[11], setResponse),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              const SizedBox(
-                                width: 125,
-                                height: 50,
-                                child: Text("HH – Market sale",
-                                    style: CustomStyle.answer),
-                              ),
-                              CustomOption.yesNoButtons(
-                                  12, response[12], setResponse),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              const SizedBox(
-                                width: 125,
-                                height: 50,
-                                child: Text("Price per unit",
-                                    style: CustomStyle.answer),
-                              ),
-                              CustomOption.yesNoButtons(
-                                  13, response[13], setResponse),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              const SizedBox(
-                                width: 125,
-                                height: 50,
-                                child: Text("Collection by other sites",
-                                    style: CustomStyle.answer),
-                              ),
-                              CustomOption.yesNoButtons(
-                                  14, response[14], setResponse),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              const SizedBox(
-                                width: 125,
-                                height: 50,
-                                child: Text("Harvesting rights of other sites",
-                                    style: CustomStyle.answer),
-                              ),
-                              CustomOption.yesNoButtons(
-                                  15, response[15], setResponse),
-                            ],
-                          ),
-                        ],
-                      )
-                    ]),
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      physics: const BouncingScrollPhysics(),
+                      child: Row(children: [
+                        const SizedBox(
+                            width: 75,
+                            child: Text("Grazing", style: CustomStyle.answer)),
+                        const SizedBox(width: 2),
+                        const VerticalDivider(
+                          color: Color(0xffD1D0BD),
+                          thickness: 0.5,
+                        ),
+                        const SizedBox(width: 2),
+                        Column(
+                          children: [
+                            Row(
+                              children: [
+                                const SizedBox(
+                                  width: 125,
+                                  height: 50,
+                                  child: Text("HH – Self consumption",
+                                      style: CustomStyle.answer),
+                                ),
+                                CustomOption.yesNoButtons(
+                                    11, response[11], setResponse),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                const SizedBox(
+                                  width: 125,
+                                  height: 50,
+                                  child: Text("HH – Market sale",
+                                      style: CustomStyle.answer),
+                                ),
+                                CustomOption.yesNoButtons(
+                                    12, response[12], setResponse),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                const SizedBox(
+                                  width: 130,
+                                  height: 50,
+                                  child: Text(
+                                    "Price per unit",
+                                    style: CustomStyle.answer,
+                                  ),
+                                ),
+                                // Textfield
+                                SizedBox(
+                                  width: 125,
+                                  height: 30,
+                                  child: TextField(
+                                    controller: response13Controller,
+                                    style: CustomStyle.form,
+                                    keyboardType: TextInputType.number,
+                                    textAlign: TextAlign.start,
+                                    decoration: const InputDecoration(
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: Color(0xffD1D0BD),
+                                            width: 1.0),
+                                      ),
+                                      enabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: Color(0xffD1D0BD),
+                                            width: 1.0),
+                                      ),
+                                      contentPadding: EdgeInsets.only(
+                                        // top: 5.0,
+                                        // bottom: 5.0,
+                                        left: 10.0,
+                                        right: 10.0,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                const SizedBox(
+                                  width: 125,
+                                  height: 50,
+                                  child: Text("Collection by other sites",
+                                      style: CustomStyle.answer),
+                                ),
+                                CustomOption.yesNoButtons(
+                                    14, response[14], setResponse),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                const SizedBox(
+                                  width: 125,
+                                  height: 50,
+                                  child: Text(
+                                      "Harvesting rights of other sites",
+                                      style: CustomStyle.answer),
+                                ),
+                                CustomOption.yesNoButtons(
+                                    15, response[15], setResponse),
+                              ],
+                            ),
+                          ],
+                        )
+                      ]),
+                    ),
                   ),
                   const SizedBox(
                     height: 20,
                   ),
                   SizedBox(
                     height: 250,
-                    child: Row(children: [
-                      const SizedBox(
-                          width: 75,
-                          child: Text("Seasonal Forest Products",
-                              style: CustomStyle.answer)),
-                      const SizedBox(width: 2),
-                      const VerticalDivider(
-                        color: Color(0xffD1D0BD),
-                        thickness: 0.5,
-                      ),
-                      const SizedBox(width: 2),
-                      Column(
-                        children: [
-                          Row(
-                            children: [
-                              const SizedBox(
-                                width: 125,
-                                height: 50,
-                                child: Text("HH – Self consumption",
-                                    style: CustomStyle.answer),
-                              ),
-                              CustomOption.yesNoButtons(
-                                  16, response[16], setResponse),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              const SizedBox(
-                                width: 125,
-                                height: 50,
-                                child: Text("HH – Market sale",
-                                    style: CustomStyle.answer),
-                              ),
-                              CustomOption.yesNoButtons(
-                                  17, response[17], setResponse),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              const SizedBox(
-                                width: 125,
-                                height: 50,
-                                child: Text("Price per unit",
-                                    style: CustomStyle.answer),
-                              ),
-                              CustomOption.yesNoButtons(
-                                  18, response[18], setResponse),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              const SizedBox(
-                                width: 125,
-                                height: 50,
-                                child: Text("Collection by other sites",
-                                    style: CustomStyle.answer),
-                              ),
-                              CustomOption.yesNoButtons(
-                                  19, response[19], setResponse),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              const SizedBox(
-                                width: 125,
-                                height: 50,
-                                child: Text("Harvesting rights of other sites",
-                                    style: CustomStyle.answer),
-                              ),
-                              CustomOption.yesNoButtons(
-                                  20, response[20], setResponse),
-                            ],
-                          ),
-                        ],
-                      )
-                    ]),
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      physics: const BouncingScrollPhysics(),
+                      child: Row(children: [
+                        const SizedBox(
+                            width: 75,
+                            child: Text("Seasonal Forest Products",
+                                style: CustomStyle.answer)),
+                        const SizedBox(width: 2),
+                        const VerticalDivider(
+                          color: Color(0xffD1D0BD),
+                          thickness: 0.5,
+                        ),
+                        const SizedBox(width: 2),
+                        Column(
+                          children: [
+                            Row(
+                              children: [
+                                const SizedBox(
+                                  width: 125,
+                                  height: 50,
+                                  child: Text("HH – Self consumption",
+                                      style: CustomStyle.answer),
+                                ),
+                                CustomOption.yesNoButtons(
+                                    16, response[16], setResponse),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                const SizedBox(
+                                  width: 125,
+                                  height: 50,
+                                  child: Text("HH – Market sale",
+                                      style: CustomStyle.answer),
+                                ),
+                                CustomOption.yesNoButtons(
+                                    17, response[17], setResponse),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                const SizedBox(
+                                  width: 130,
+                                  height: 50,
+                                  child: Text(
+                                    "Price per unit",
+                                    style: CustomStyle.answer,
+                                  ),
+                                ),
+                                // Textfield
+                                SizedBox(
+                                  width: 125,
+                                  height: 30,
+                                  child: TextField(
+                                    controller: response18Controller,
+                                    style: CustomStyle.form,
+                                    keyboardType: TextInputType.number,
+                                    textAlign: TextAlign.start,
+                                    decoration: const InputDecoration(
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: Color(0xffD1D0BD),
+                                            width: 1.0),
+                                      ),
+                                      enabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: Color(0xffD1D0BD),
+                                            width: 1.0),
+                                      ),
+                                      contentPadding: EdgeInsets.only(
+                                        // top: 5.0,
+                                        // bottom: 5.0,
+                                        left: 10.0,
+                                        right: 10.0,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                const SizedBox(
+                                  width: 125,
+                                  height: 50,
+                                  child: Text("Collection by other sites",
+                                      style: CustomStyle.answer),
+                                ),
+                                CustomOption.yesNoButtons(
+                                    19, response[19], setResponse),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                const SizedBox(
+                                  width: 125,
+                                  height: 50,
+                                  child: Text(
+                                      "Harvesting rights of other sites",
+                                      style: CustomStyle.answer),
+                                ),
+                                CustomOption.yesNoButtons(
+                                    20, response[20], setResponse),
+                              ],
+                            ),
+                          ],
+                        )
+                      ]),
+                    ),
                   ),
                   const SizedBox(
                     height: 20,
                   ),
                   SizedBox(
                     height: 250,
-                    child: Row(children: [
-                      const SizedBox(
-                          width: 75,
-                          child: Text("Wildlife", style: CustomStyle.answer)),
-                      const SizedBox(width: 2),
-                      const VerticalDivider(
-                        color: Color(0xffD1D0BD),
-                        thickness: 0.5,
-                      ),
-                      const SizedBox(width: 2),
-                      Column(
-                        children: [
-                          Row(
-                            children: [
-                              const SizedBox(
-                                width: 125,
-                                height: 50,
-                                child: Text("HH – Self consumption",
-                                    style: CustomStyle.answer),
-                              ),
-                              CustomOption.yesNoButtons(
-                                  21, response[21], setResponse),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              const SizedBox(
-                                width: 125,
-                                height: 50,
-                                child: Text("HH – Market sale",
-                                    style: CustomStyle.answer),
-                              ),
-                              CustomOption.yesNoButtons(
-                                  22, response[22], setResponse),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              const SizedBox(
-                                width: 125,
-                                height: 50,
-                                child: Text("Price per unit",
-                                    style: CustomStyle.answer),
-                              ),
-                              CustomOption.yesNoButtons(
-                                  23, response[23], setResponse),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              const SizedBox(
-                                width: 125,
-                                height: 50,
-                                child: Text("Collection by other sites",
-                                    style: CustomStyle.answer),
-                              ),
-                              CustomOption.yesNoButtons(
-                                  24, response[24], setResponse),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              const SizedBox(
-                                width: 125,
-                                height: 50,
-                                child: Text("Harvesting rights of other sites",
-                                    style: CustomStyle.answer),
-                              ),
-                              CustomOption.yesNoButtons(
-                                  25, response[25], setResponse),
-                            ],
-                          ),
-                        ],
-                      )
-                    ]),
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      physics: const BouncingScrollPhysics(),
+                      child: Row(children: [
+                        const SizedBox(
+                            width: 75,
+                            child: Text("Wildlife", style: CustomStyle.answer)),
+                        const SizedBox(width: 2),
+                        const VerticalDivider(
+                          color: Color(0xffD1D0BD),
+                          thickness: 0.5,
+                        ),
+                        const SizedBox(width: 2),
+                        Column(
+                          children: [
+                            Row(
+                              children: [
+                                const SizedBox(
+                                  width: 125,
+                                  height: 50,
+                                  child: Text("HH – Self consumption",
+                                      style: CustomStyle.answer),
+                                ),
+                                CustomOption.yesNoButtons(
+                                    21, response[21], setResponse),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                const SizedBox(
+                                  width: 125,
+                                  height: 50,
+                                  child: Text("HH – Market sale",
+                                      style: CustomStyle.answer),
+                                ),
+                                CustomOption.yesNoButtons(
+                                    22, response[22], setResponse),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                const SizedBox(
+                                  width: 130,
+                                  height: 50,
+                                  child: Text(
+                                    "Price per unit",
+                                    style: CustomStyle.answer,
+                                  ),
+                                ),
+                                // Textfield
+                                SizedBox(
+                                  width: 125,
+                                  height: 30,
+                                  child: TextField(
+                                    controller: response23Controller,
+                                    style: CustomStyle.form,
+                                    keyboardType: TextInputType.number,
+                                    textAlign: TextAlign.start,
+                                    decoration: const InputDecoration(
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: Color(0xffD1D0BD),
+                                            width: 1.0),
+                                      ),
+                                      enabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: Color(0xffD1D0BD),
+                                            width: 1.0),
+                                      ),
+                                      contentPadding: EdgeInsets.only(
+                                        // top: 5.0,
+                                        // bottom: 5.0,
+                                        left: 10.0,
+                                        right: 10.0,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                const SizedBox(
+                                  width: 125,
+                                  height: 50,
+                                  child: Text("Collection by other sites",
+                                      style: CustomStyle.answer),
+                                ),
+                                CustomOption.yesNoButtons(
+                                    24, response[24], setResponse),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                const SizedBox(
+                                  width: 125,
+                                  height: 50,
+                                  child: Text(
+                                      "Harvesting rights of other sites",
+                                      style: CustomStyle.answer),
+                                ),
+                                CustomOption.yesNoButtons(
+                                    25, response[25], setResponse),
+                              ],
+                            ),
+                          ],
+                        )
+                      ]),
+                    ),
                   ),
                   const SizedBox(
                     height: 20,
                   ),
                   SizedBox(
                     height: 250,
-                    child: Row(children: [
-                      const SizedBox(
-                          width: 75,
-                          child: Text("Other", style: CustomStyle.answer)),
-                      const SizedBox(width: 2),
-                      const VerticalDivider(
-                        color: Color(0xffD1D0BD),
-                        thickness: 0.5,
-                      ),
-                      const SizedBox(width: 2),
-                      Column(
-                        children: [
-                          Row(
-                            children: [
-                              const SizedBox(
-                                width: 125,
-                                height: 50,
-                                child: Text("HH – Self consumption",
-                                    style: CustomStyle.answer),
-                              ),
-                              CustomOption.yesNoButtons(
-                                  26, response[26], setResponse),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              const SizedBox(
-                                width: 125,
-                                height: 50,
-                                child: Text("HH – Market sale",
-                                    style: CustomStyle.answer),
-                              ),
-                              CustomOption.yesNoButtons(
-                                  27, response[27], setResponse),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              const SizedBox(
-                                width: 125,
-                                height: 50,
-                                child: Text("Price per unit",
-                                    style: CustomStyle.answer),
-                              ),
-                              CustomOption.yesNoButtons(
-                                  28, response[28], setResponse),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              const SizedBox(
-                                width: 125,
-                                height: 50,
-                                child: Text("Collection by other sites",
-                                    style: CustomStyle.answer),
-                              ),
-                              CustomOption.yesNoButtons(
-                                  29, response[29], setResponse),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              const SizedBox(
-                                width: 125,
-                                height: 50,
-                                child: Text("Harvesting rights of other sites",
-                                    style: CustomStyle.answer),
-                              ),
-                              CustomOption.yesNoButtons(
-                                  30, response[30], setResponse),
-                            ],
-                          ),
-                        ],
-                      )
-                    ]),
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      physics: const BouncingScrollPhysics(),
+                      child: Row(children: [
+                        const SizedBox(
+                            width: 75,
+                            child: Text("Other", style: CustomStyle.answer)),
+                        const SizedBox(width: 2),
+                        const VerticalDivider(
+                          color: Color(0xffD1D0BD),
+                          thickness: 0.5,
+                        ),
+                        const SizedBox(width: 2),
+                        Column(
+                          children: [
+                            Row(
+                              children: [
+                                const SizedBox(
+                                  width: 125,
+                                  height: 50,
+                                  child: Text("HH – Self consumption",
+                                      style: CustomStyle.answer),
+                                ),
+                                CustomOption.yesNoButtons(
+                                    26, response[26], setResponse),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                const SizedBox(
+                                  width: 125,
+                                  height: 50,
+                                  child: Text("HH – Market sale",
+                                      style: CustomStyle.answer),
+                                ),
+                                CustomOption.yesNoButtons(
+                                    27, response[27], setResponse),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                const SizedBox(
+                                  width: 130,
+                                  height: 50,
+                                  child: Text(
+                                    "Price per unit",
+                                    style: CustomStyle.answer,
+                                  ),
+                                ),
+                                // Textfield
+                                SizedBox(
+                                  width: 125,
+                                  height: 30,
+                                  child: TextField(
+                                    controller: response28Controller,
+                                    style: CustomStyle.form,
+                                    keyboardType: TextInputType.number,
+                                    textAlign: TextAlign.start,
+                                    decoration: const InputDecoration(
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: Color(0xffD1D0BD),
+                                            width: 1.0),
+                                      ),
+                                      enabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: Color(0xffD1D0BD),
+                                            width: 1.0),
+                                      ),
+                                      contentPadding: EdgeInsets.only(
+                                        // top: 5.0,
+                                        // bottom: 5.0,
+                                        left: 10.0,
+                                        right: 10.0,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                const SizedBox(
+                                  width: 125,
+                                  height: 50,
+                                  child: Text("Collection by other sites",
+                                      style: CustomStyle.answer),
+                                ),
+                                CustomOption.yesNoButtons(
+                                    29, response[29], setResponse),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                const SizedBox(
+                                  width: 125,
+                                  height: 50,
+                                  child: Text(
+                                      "Harvesting rights of other sites",
+                                      style: CustomStyle.answer),
+                                ),
+                                CustomOption.yesNoButtons(
+                                    30, response[30], setResponse),
+                              ],
+                            ),
+                          ],
+                        )
+                      ]),
+                    ),
                   ),
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -621,7 +834,7 @@ class _Screen10State extends State<Screen10> {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (_) {
-          return const Screen11();
+          return Screen11(formName: widget.formName);
         },
       ),
     );
@@ -694,42 +907,42 @@ class _Screen10State extends State<Screen10> {
             "timber": {
               "self_consumption": response[1],
               "market_sale": response[2],
-              "price": response[3],
+              // "price": response[3],
               "collection": response[4],
               "harvesting": response[5]
             },
             "fuelwood": {
               "self_consumption": response[6],
               "market_sale": response[7],
-              "price": response[8],
+              // "price": response[8],
               "collection": response[9],
               "harvesting": response[10]
             },
             "grazing": {
               "self_consumption": response[11],
               "market_sale": response[12],
-              "price": response[13],
+              // "price": response[13],
               "collection": response[14],
               "harvesting": response[15]
             },
             "seasonal_forest_products": {
               "self_consumption": response[16],
               "market_sale": response[17],
-              "price": response[18],
+              // "price": response[18],
               "collection": response[19],
               "harvesting": response[20]
             },
             "wildlife": {
               "self_consumption": response[21],
               "market_sale": response[22],
-              "price": response[23],
+              // "price": response[23],
               "collection": response[24],
               "harvesting": response[25]
             },
             "other": {
               "self_consumption": response[26],
               "market_sale": response[27],
-              "price": response[28],
+              // "price": response[28],
               "collection": response[29],
               "harvesting": response[30]
             }

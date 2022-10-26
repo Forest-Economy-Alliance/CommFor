@@ -1,46 +1,74 @@
 {
   "project_info": {
-    "project_number": "862872272959",
-    "firebase_url": "https://ifri-23ae3-default-rtdb.firebaseio.com",
-    "project_id": "ifri-23ae3",
-    "storage_bucket": "ifri-23ae3.appspot.com"
+    "project_number": "191546066082",
+    "firebase_url": "https://commfor-backend-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "commfor-backend",
+    "storage_bucket": "commfor-backend.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:862872272959:android:c4cb97c7fd60b4bcb6788a",
+        "mobilesdk_app_id": "1:191546066082:android:9bc36449173251c2d483fb",
         "android_client_info": {
-          "package_name": "com.mangoes.ifri"
+          "package_name": "com.example.ifri"
         }
       },
       "oauth_client": [
         {
-          "client_id": "862872272959-dp8ed6mq9tio86nhsop3elm3fi84hg5g.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.mangoes.ifri",
-            "certificate_hash": "7b71ec583eaaccd443af686511caa3ced42b6be8"
-          }
-        },
-        {
-          "client_id": "862872272959-dq5h7202dlbr5ur2lhmljeq63t3kjli3.apps.googleusercontent.com",
+          "client_id": "191546066082-ft8klld6ohfuhu0nij8fdgot2cln1poq.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDkkbU5Nh8ONAAfQBaOY1q7UMJ4drgixH4"
+          "current_key": "AIzaSyD-Tg5a7d39Er9RSGEZj1_FB_s_anz_gaA"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "862872272959-dq5h7202dlbr5ur2lhmljeq63t3kjli3.apps.googleusercontent.com",
+              "client_id": "191546066082-ft8klld6ohfuhu0nij8fdgot2cln1poq.apps.googleusercontent.com",
               "client_type": 3
             },
             {
-              "client_id": "862872272959-u9s15bod6pl5lb7r4vgsd4112ftvk2tn.apps.googleusercontent.com",
+              "client_id": "191546066082-dt389oe78ea3mnucdqlqchbr1r5kga7l.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.ifri"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:191546066082:android:32ecd1d129d20275d483fb",
+        "android_client_info": {
+          "package_name": "com.ifri.commfor"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "191546066082-ft8klld6ohfuhu0nij8fdgot2cln1poq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD-Tg5a7d39Er9RSGEZj1_FB_s_anz_gaA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "191546066082-ft8klld6ohfuhu0nij8fdgot2cln1poq.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "191546066082-dt389oe78ea3mnucdqlqchbr1r5kga7l.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
                 "bundle_id": "com.example.ifri"

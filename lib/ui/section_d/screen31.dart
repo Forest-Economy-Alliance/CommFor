@@ -1,172 +1,287 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:ifri/constants/section_d.dart';
+import 'package:ifri/services/auth_service/firebase_auth_impl.dart';
 import 'package:ifri/style/custom_button.dart';
+import 'package:ifri/style/custom_option.dart';
 import 'package:ifri/style/custom_style.dart';
-import 'package:ifri/ui/section_d/screen32.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:ifri/constants/constants.dart';
+import 'package:ifri/ui/section_d/screen33.dart';
+import 'package:provider/provider.dart';
 
 class Screen31 extends StatefulWidget {
-  const Screen31({Key? key}) : super(key: key);
-
+  const Screen31({Key? key, required this.formName}) : super(key: key);
+  final String formName;
   @override
   State<Screen31> createState() => _Screen31State();
 }
 
 class _Screen31State extends State<Screen31> {
   DatabaseReference? ref;
-  TextEditingController question1Controller = TextEditingController();
-  TextEditingController question2Controller = TextEditingController();
   String screenName = "screen_31";
-  SharedPreferences? _sharedPreferences;
+  Map<int, String> response57 = {};
+  String _response58 = "";
+  bool isLoading = true;
   String? userId;
+  late FirebaseAuthService authService;
+
   @override
   void initState() {
     super.initState();
+    authService = context.read<FirebaseAuthService>();
+
     initialize();
   }
 
   void initialize() async {
-    _sharedPreferences = await SharedPreferences.getInstance();
-    userId = _sharedPreferences!.getString(Constants.USER_ID);
-    ref = FirebaseDatabase.instance.ref('forms/${userId!}/1/section_d');
+    userId = authService.user!.uid;
+
+    ref = FirebaseDatabase.instance
+        .ref('forms/${userId!}/${widget.formName}/section_d');
     setData();
   }
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-        child: Scaffold(
-      body: ColoredBox(
-        color: const Color(0xFF12160F),
+    return Scaffold(
+      backgroundColor: const Color(0xFF12160F),
+      body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.only(
               left: 10.0, right: 10.0, top: 5.0, bottom: 5.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  InkWell(
-                    onTap: () => {},
-                    child: Image.asset(
-                      'assets/icons/ic_back.png',
-                      fit: BoxFit.cover,
-                      width: 20,
-                      height: 20,
-                    ),
-                  ),
-                  Container(
-                    margin: const EdgeInsets.symmetric(
-                        horizontal: 20, vertical: 10),
-                    child: const Text(
-                      SectionD.SECTION_D_SECTION_2,
-                      style: CustomStyle.screenTitle,
-                    ),
-                  ),
-                  InkWell(
-                    onTap: () => {},
-                    child: Image.asset(
-                      'assets/icons/ic_close.png',
-                      fit: BoxFit.cover,
-                      width: 30,
-                      height: 30,
-                    ),
-                  ),
-                ],
-              ),
-              Container(
-                alignment: Alignment.center,
-                child: const SizedBox(
-                    height: 20,
-                    width: 300,
-                    child: Divider(color: Color(0xffD1D0BD))),
-              ),
-              Padding(
-                padding:
-                    const EdgeInsets.only(left: 10.0, right: 10.0, top: 25.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    const Text(SectionD.SECTION_D_QUESTION_55,
-                        style: CustomStyle.questionTitle),
-                    const SizedBox(
-                      height: 20,
+                    InkWell(
+                      onTap: () => {navigateToPreviousScreen(context)},
+                      child: Image.asset(
+                        'assets/icons/ic_back.png',
+                        fit: BoxFit.cover,
+                        width: 20,
+                        height: 20,
+                      ),
                     ),
-                    TextField(
-                        controller: question1Controller,
-                        style: CustomStyle.answer,
-                        textAlign: TextAlign.start,
-                        decoration: CustomStyle.answerInputDecoration),
-                    const SizedBox(
-                      height: 40,
+                    Container(
+                      margin: const EdgeInsets.symmetric(
+                          horizontal: 20, vertical: 10),
+                      child: const Text(
+                        SectionD.SECTION_D_SECTION_2,
+                        style: CustomStyle.screenTitle,
+                      ),
                     ),
-                    const Text(SectionD.SECTION_D_QUESTION_56,
-                        style: CustomStyle.questionTitle),
-                    const SizedBox(
-                      height: 20,
+                    InkWell(
+                      onTap: () => {},
+                      child: Image.asset(
+                        'assets/icons/ic_close.png',
+                        fit: BoxFit.cover,
+                        width: 30,
+                        height: 30,
+                      ),
                     ),
-                    TextField(
-                        controller: question2Controller,
-                        style: CustomStyle.answer,
-                        textAlign: TextAlign.start,
-                        decoration: CustomStyle.answerInputDecoration),
                   ],
                 ),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  InkWell(
-                      onTap: () => syncData(context),
-                      splashColor: Colors.lightBlue,
-                      borderRadius: BorderRadius.circular(2),
-                      child: CustomButton.nextButton),
-                ],
-              ),
-            ],
+                Column(
+                  children: [
+                    Container(
+                      alignment: Alignment.center,
+                      child: const SizedBox(
+                          height: 20,
+                          width: 300,
+                          child: Divider(color: Color(0xffD1D0BD))),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(
+                          left: 10.0, right: 10.0, top: 25.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(
+                                left: 10.0, right: 10.0, top: 25.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: const [
+                                Text(SectionD.SECTION_D_QUESTION_57,
+                                    style: CustomStyle.questionTitle),
+                                SizedBox(
+                                  height: 20,
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 10.0),
+                            child: SizedBox(
+                              child: SingleChildScrollView(
+                                scrollDirection: Axis.horizontal,
+                                physics: const BouncingScrollPhysics(),
+                                child: Row(children: [
+                                  Column(
+                                    children: [
+                                      Row(
+                                        children: [
+                                          const SizedBox(
+                                            width: 200,
+                                            height: 60,
+                                            child: Text(
+                                                SectionD
+                                                    .SECTION_D_QUESTION_57_OPTION_1,
+                                                style: CustomStyle.answer),
+                                          ),
+                                          CustomOption.yesNoButtons(
+                                              1, response57[1], setResponse),
+                                        ],
+                                      ),
+                                      Row(
+                                        children: [
+                                          const SizedBox(
+                                            width: 200,
+                                            height: 75,
+                                            child: Text(
+                                                SectionD
+                                                    .SECTION_D_QUESTION_57_OPTION_2,
+                                                style: CustomStyle.answer),
+                                          ),
+                                          CustomOption.yesNoButtons(
+                                              2, response57[2], setResponse),
+                                        ],
+                                      ),
+                                      Row(
+                                        children: [
+                                          const SizedBox(
+                                            width: 200,
+                                            height: 60,
+                                            child: Text(
+                                                SectionD
+                                                    .SECTION_D_QUESTION_57_OPTION_3,
+                                                style: CustomStyle.answer),
+                                          ),
+                                          CustomOption.yesNoButtons(
+                                              3, response57[3], setResponse),
+                                        ],
+                                      ),
+                                    ],
+                                  )
+                                ]),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          const Text(SectionD.SECTION_D_QUESTION_58,
+                              style: CustomStyle.questionTitle),
+                          const SizedBox(
+                            height: 5,
+                          ),
+                          CustomOption.optionRadioButtons(const [
+                            'Yes',
+                            'No',
+                          ], true, _response58, setResponse58),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        InkWell(
+                            onTap: () => syncData(context),
+                            splashColor: Colors.lightBlue,
+                            borderRadius: BorderRadius.circular(2),
+                            child: CustomButton.nextButton),
+                      ],
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),
-    ));
+    );
+  }
+
+  void setResponse(int position, String value) async {
+    response57[position] = value;
+  }
+
+  void setResponse58(String value) async {
+    _response58 = value;
+  }
+
+  navigateToPreviousScreen(BuildContext context) {
+    Navigator.of(context).pop();
   }
 
   void setData() async {
-    final response1 = await ref!
+    final res3 = await ref!
         .child(screenName)
-        .child("question_55")
+        .child("question_58")
         .child("response")
         .get();
-    question1Controller.text =
-        null == response1.value ? "" : response1.value.toString();
-    final response2 = await ref!
+    ref!
         .child(screenName)
-        .child("question_56")
+        .child("question_57")
         .child("response")
-        .get();
-    question2Controller.text =
-        null == response2.value ? "" : response2.value.toString();
+        .get()
+        .then((snapshot) {
+      if (snapshot.exists) {
+        Map<dynamic, dynamic> values = snapshot.value as Map<dynamic, dynamic>;
+        values.forEach((key, value) {
+          // print(key);
+          int p = -1;
+          if (SectionD.SECTION_D_QUESTION_57_OPTION_1 == key) {
+            p = 1;
+          } else if (SectionD.SECTION_D_QUESTION_57_OPTION_2 == key) {
+            p = 2;
+          } else if (SectionD.SECTION_D_QUESTION_57_OPTION_3 == key) {
+            p = 3;
+          }
+          if (p > -1) {
+            response57[p] = value;
+          }
+        });
+      } else {
+        print('No data available');
+      }
+
+      setState(() {
+        _response58 = null == res3.value ? "" : res3.value.toString();
+        isLoading = false;
+      });
+    });
   }
 
   void syncData(BuildContext context) async {
     await ref!.update({
       screenName: {
-        "question_55": {
-          "question": SectionD.SECTION_D_QUESTION_55,
-          "response": question1Controller.text
+        "question_57": {
+          "question": SectionD.SECTION_D_QUESTION_57,
+          "response": {
+            SectionD.SECTION_D_QUESTION_57_OPTION_1: response57[1],
+            SectionD.SECTION_D_QUESTION_57_OPTION_2: response57[2],
+            SectionD.SECTION_D_QUESTION_57_OPTION_3: response57[3],
+          }
         },
-        "question_56": {
-          "question": SectionD.SECTION_D_QUESTION_56,
-          "response": question2Controller.text
-        }
+        "question_58": {
+          "question": SectionD.SECTION_D_QUESTION_58,
+          "response": _response58
+        },
       }
     }).whenComplete(() => navigateToNextScreen(context));
   }
@@ -175,7 +290,7 @@ class _Screen31State extends State<Screen31> {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (_) {
-          return const Screen32();
+          return Screen33(formName: widget.formName);
         },
       ),
     );

@@ -1,13 +1,8 @@
 import 'dart:ui';
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:ifri/services/auth_service/firebase_auth_impl.dart';
-import 'package:ifri/ui/home/home_page.dart';
 import 'package:provider/provider.dart';
-import 'package:firebase_database/firebase_database.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:ifri/constants/constants.dart';
 
 class RegistrationCard extends StatefulWidget {
   const RegistrationCard({Key? key}) : super(key: key);
@@ -18,8 +13,6 @@ class RegistrationCard extends StatefulWidget {
 
 class _RegistrationCardState extends State<RegistrationCard> {
   late FirebaseAuthService authService;
-  DatabaseReference ref = FirebaseDatabase.instance.ref('userDetails');
-  SharedPreferences? _sharedPreferences;
 
   @override
   void initState() {
@@ -27,14 +20,11 @@ class _RegistrationCardState extends State<RegistrationCard> {
     authService = context.read<FirebaseAuthService>();
   }
 
-  void initialize() async {
-    _sharedPreferences = await SharedPreferences.getInstance();
-  }
-
   TextEditingController emailController = TextEditingController();
   TextEditingController usernameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController orgNameController = TextEditingController();
+  TextEditingController contNameController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -132,7 +122,7 @@ class _RegistrationCardState extends State<RegistrationCard> {
                 ),
                 child: TextField(
                   controller: orgNameController,
-                  keyboardType: TextInputType.emailAddress,
+                  keyboardType: TextInputType.name,
                   style: const TextStyle(
                     color: Color(0xFFD1D0BD),
                     fontFamily: 'HelveticaNeue',
@@ -145,11 +135,37 @@ class _RegistrationCardState extends State<RegistrationCard> {
                   ),
                 ),
               ),
+              Container(
+                margin: const EdgeInsets.symmetric(vertical: 10),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                decoration: BoxDecoration(
+                  color: Colors.black26,
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                child: TextField(
+                  controller: contNameController,
+                  keyboardType: TextInputType.text,
+                  style: const TextStyle(
+                    color: Color(0xFFD1D0BD),
+                    fontFamily: 'HelveticaNeue',
+                  ),
+                  cursorColor: const Color(0xFFD1D0BD),
+                  decoration: const InputDecoration(
+                    labelText: 'Country',
+                    labelStyle: TextStyle(color: Color(0xFFD1D0BD)),
+                    border: InputBorder.none,
+                  ),
+                ),
+              ),
               MaterialButton(
                 onPressed: () async {
                   final res = await authService.registerWithEmailAndPassword(
-                    emailController.text.trim(),
-                    passwordController.text.trim(),
+                    email: emailController.text.trim(),
+                    password: passwordController.text.trim(),
+                    org: orgNameController.text.trim(),
+                    username: usernameController.text.trim(),
+                    country: contNameController.text.trim(),
                   );
                   // handle errors better as we need to check for weak password etc.
                   if (res == null) {
@@ -160,11 +176,8 @@ class _RegistrationCardState extends State<RegistrationCard> {
                         ),
                       ),
                     );
-                    print("sddssd");
-                  } else {
-                    print("sddssddd");
-                    syncData(context);
                   }
+                  Navigator.pop(context);
                 },
                 color: const Color(0xFFD1D0BD),
                 clipBehavior: Clip.antiAlias,
@@ -219,17 +232,5 @@ class _RegistrationCardState extends State<RegistrationCard> {
         ),
       ),
     );
-  }
-
-  void syncData(BuildContext context) async {
-    await ref.push().update({
-      "email": emailController.text,
-      "username": usernameController.text,
-      "organization": orgNameController.text,
-    }).whenComplete(() => navigateToNextScreen(context));
-  }
-
-  navigateToNextScreen(BuildContext context) {
-    Navigator.of(context).popAndPushNamed('/home');
   }
 }

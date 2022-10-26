@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:ifri/constants/constants.dart';
 import 'package:ifri/constants/section_b.dart';
 import 'package:ifri/style/custom_button.dart';
 import 'package:ifri/style/custom_option.dart';
@@ -12,11 +11,12 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:ifri/ui/section_b/screen9.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:ifri/services/auth_service/firebase_auth_impl.dart';
+import 'package:provider/provider.dart';
 
 class Screen8 extends StatefulWidget {
-  const Screen8({Key? key}) : super(key: key);
-
+  const Screen8({Key? key, required this.formName}) : super(key: key);
+  final String formName;
   @override
   State<Screen8> createState() => _Screen8State();
 }
@@ -30,10 +30,13 @@ class _Screen8State extends State<Screen8> {
   bool isLoading = true;
   TextEditingController response1Controller = TextEditingController();
   TextEditingController response2Controller = TextEditingController();
-  SharedPreferences? _sharedPreferences;
+
+  late FirebaseAuthService authService;
+
   @override
   void initState() {
     super.initState();
+    authService = context.read<FirebaseAuthService>();
     initializeData(context);
   }
 
@@ -123,7 +126,8 @@ class _Screen8State extends State<Screen8> {
                           const SizedBox(
                             height: 15,
                           ),
-                          const Text("Bot. Name", style: CustomStyle.form),
+                          const Text("Scientific Name",
+                              style: CustomStyle.form),
                           const SizedBox(
                             height: 15,
                           ),
@@ -222,7 +226,7 @@ class _Screen8State extends State<Screen8> {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (_) {
-          return const Screen9();
+          return Screen9(formName: widget.formName);
         },
       ),
     );
@@ -233,9 +237,10 @@ class _Screen8State extends State<Screen8> {
   }
 
   void initializeData(BuildContext context) async {
-    _sharedPreferences = await SharedPreferences.getInstance();
-    userId = _sharedPreferences!.getString(Constants.USER_ID)!;
-    ref = FirebaseDatabase.instance.ref('forms/$userId/1/section_b');
+    userId = authService.user!.uid;
+
+    ref = FirebaseDatabase.instance
+        .ref('forms/$userId/${widget.formName}/section_b');
     await ref!.child(screenName).child("question_10").update({
       "question": SectionB.SECTION_B_QUESTION_10,
     });
@@ -319,7 +324,7 @@ class _Screen8State extends State<Screen8> {
     final pickedImage = await picker.getImage(
         source: ImageSource.gallery, maxWidth: 1000, imageQuality: 75);
     final pickedImageFile = File(pickedImage!.path);
-    print("Path : " + pickedImage.path);
+    print("Path : ${pickedImage.path}");
 
     final metadata = SettableMetadata(contentType: "image/jpeg");
 

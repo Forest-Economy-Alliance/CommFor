@@ -1,15 +1,15 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:ifri/constants/constants.dart';
 import 'package:ifri/constants/section_c.dart';
 import 'package:ifri/style/custom_button.dart';
 import 'package:ifri/style/custom_style.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ifri/ui/section_c/screen25.dart';
+import 'package:ifri/services/auth_service/firebase_auth_impl.dart';
+import 'package:provider/provider.dart';
 
 class Screen24 extends StatefulWidget {
-  const Screen24({Key? key}) : super(key: key);
-
+  const Screen24({Key? key, required this.formName}) : super(key: key);
+  final String formName;
   @override
   State<Screen24> createState() => _Screen24State();
 }
@@ -35,357 +35,361 @@ class _Screen24State extends State<Screen24> {
   TextEditingController question46Controller16 = TextEditingController();
 
   String screenName = "screen_24";
-  SharedPreferences? _sharedPreferences;
+  late FirebaseAuthService authService;
+
   String? userId;
 
   @override
   void initState() {
     super.initState();
+    authService = context.read<FirebaseAuthService>();
+
     initialize();
   }
 
   void initialize() async {
-    _sharedPreferences = await SharedPreferences.getInstance();
-    userId = _sharedPreferences!.getString(Constants.USER_ID);
-    ref = FirebaseDatabase.instance.ref('forms/${userId!}/1/section_c');
+    userId = authService.user!.uid;
+    ref = FirebaseDatabase.instance
+        .ref('forms/${userId!}/${widget.formName}/section_c');
     setData();
   }
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-        child: Scaffold(
-      body: ColoredBox(
-        color: const Color(0xFF12160F),
-        child: Padding(
-          padding: const EdgeInsets.only(
-              left: 10.0, right: 10.0, top: 5.0, bottom: 5.0),
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    InkWell(
-                      onTap: () => {},
-                      child: Image.asset(
-                        'assets/icons/ic_back.png',
-                        fit: BoxFit.cover,
-                        width: 20,
-                        height: 20,
-                      ),
-                    ),
-                    Container(
-                      margin: const EdgeInsets.symmetric(
-                          horizontal: 20, vertical: 10),
-                      child: const Text(
-                        SectionC.SECTION_C_SECTION_9,
-                        style: CustomStyle.screenTitle,
-                      ),
-                    ),
-                    InkWell(
-                      onTap: () => {},
-                      child: Image.asset(
-                        'assets/icons/ic_close.png',
-                        fit: BoxFit.cover,
-                        width: 30,
-                        height: 30,
-                      ),
-                    ),
-                  ],
-                ),
-                Container(
-                  alignment: Alignment.center,
-                  child: const SizedBox(
-                      height: 20,
-                      width: 300,
-                      child: Divider(color: Color(0xffD1D0BD))),
-                ),
-                Padding(
-                  padding:
-                      const EdgeInsets.only(left: 10.0, right: 10.0, top: 25.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+      child: Scaffold(
+        body: ColoredBox(
+          color: const Color(0xFF12160F),
+          child: Padding(
+            padding: const EdgeInsets.only(
+                left: 10.0, right: 10.0, top: 5.0, bottom: 5.0),
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      const Text(SectionC.SECTION_C_QUESTION_46,
-                          style: CustomStyle.questionTitle),
-                      const SizedBox(
-                        height: 20,
+                      InkWell(
+                        onTap: () => {},
+                        child: Image.asset(
+                          'assets/icons/ic_back.png',
+                          fit: BoxFit.cover,
+                          width: 20,
+                          height: 20,
+                        ),
                       ),
-                      const Text(SectionC.SECTION_C_QUESTION_46_POINT_1,
-                          style: CustomStyle.questionBoldTitle),
-                      const SizedBox(
-                        height: 20,
+                      Container(
+                        margin: const EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 10),
+                        child: const Text(
+                          SectionC.SECTION_C_SECTION_9,
+                          style: CustomStyle.screenTitle,
+                        ),
                       ),
-                      const Text(SectionC.SECTION_C_QUESTION_46_PROPERTY_1,
-                          style: CustomStyle.optionYesNo),
-                      const SizedBox(
-                        height: 20,
+                      InkWell(
+                        onTap: () => {},
+                        child: Image.asset(
+                          'assets/icons/ic_close.png',
+                          fit: BoxFit.cover,
+                          width: 30,
+                          height: 30,
+                        ),
                       ),
-                      TextField(
-                          controller: question46Controller1,
-                          style: CustomStyle.answer,
-                          textAlign: TextAlign.start,
-                          decoration: CustomStyle.answerInputDecoration),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      const Text(SectionC.SECTION_C_QUESTION_46_PROPERTY_2,
-                          style: CustomStyle.optionYesNo),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      TextField(
-                          controller: question46Controller2,
-                          style: CustomStyle.answer,
-                          textAlign: TextAlign.start,
-                          decoration: CustomStyle.answerInputDecoration),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      const Text(SectionC.SECTION_C_QUESTION_46_POINT_2,
-                          style: CustomStyle.questionBoldTitle),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      const Text(SectionC.SECTION_C_QUESTION_46_PROPERTY_1,
-                          style: CustomStyle.optionYesNo),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      TextField(
-                          controller: question46Controller3,
-                          style: CustomStyle.answer,
-                          textAlign: TextAlign.start,
-                          decoration: CustomStyle.answerInputDecoration),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      const Text(SectionC.SECTION_C_QUESTION_46_PROPERTY_2,
-                          style: CustomStyle.optionYesNo),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      TextField(
-                          controller: question46Controller4,
-                          style: CustomStyle.answer,
-                          textAlign: TextAlign.start,
-                          decoration: CustomStyle.answerInputDecoration),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      const Text(SectionC.SECTION_C_QUESTION_46_POINT_3,
-                          style: CustomStyle.questionBoldTitle),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      const Text(SectionC.SECTION_C_QUESTION_46_PROPERTY_1,
-                          style: CustomStyle.optionYesNo),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      TextField(
-                          controller: question46Controller5,
-                          style: CustomStyle.answer,
-                          textAlign: TextAlign.start,
-                          decoration: CustomStyle.answerInputDecoration),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      const Text(SectionC.SECTION_C_QUESTION_46_PROPERTY_2,
-                          style: CustomStyle.optionYesNo),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      TextField(
-                          controller: question46Controller6,
-                          style: CustomStyle.answer,
-                          textAlign: TextAlign.start,
-                          decoration: CustomStyle.answerInputDecoration),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      const Text(SectionC.SECTION_C_QUESTION_46_POINT_4,
-                          style: CustomStyle.questionBoldTitle),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      const Text(SectionC.SECTION_C_QUESTION_46_PROPERTY_1,
-                          style: CustomStyle.optionYesNo),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      TextField(
-                          controller: question46Controller7,
-                          style: CustomStyle.answer,
-                          textAlign: TextAlign.start,
-                          decoration: CustomStyle.answerInputDecoration),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      const Text(SectionC.SECTION_C_QUESTION_46_PROPERTY_2,
-                          style: CustomStyle.optionYesNo),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      TextField(
-                          controller: question46Controller8,
-                          style: CustomStyle.answer,
-                          textAlign: TextAlign.start,
-                          decoration: CustomStyle.answerInputDecoration),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      const Text(SectionC.SECTION_C_QUESTION_46_POINT_5,
-                          style: CustomStyle.questionBoldTitle),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      const Text(SectionC.SECTION_C_QUESTION_46_PROPERTY_1,
-                          style: CustomStyle.optionYesNo),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      TextField(
-                          controller: question46Controller9,
-                          style: CustomStyle.answer,
-                          textAlign: TextAlign.start,
-                          decoration: CustomStyle.answerInputDecoration),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      const Text(SectionC.SECTION_C_QUESTION_46_PROPERTY_2,
-                          style: CustomStyle.optionYesNo),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      TextField(
-                          controller: question46Controller10,
-                          style: CustomStyle.answer,
-                          textAlign: TextAlign.start,
-                          decoration: CustomStyle.answerInputDecoration),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      const Text(SectionC.SECTION_C_QUESTION_46_POINT_6,
-                          style: CustomStyle.questionBoldTitle),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      const Text(SectionC.SECTION_C_QUESTION_46_PROPERTY_1,
-                          style: CustomStyle.optionYesNo),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      TextField(
-                          controller: question46Controller11,
-                          style: CustomStyle.answer,
-                          textAlign: TextAlign.start,
-                          decoration: CustomStyle.answerInputDecoration),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      const Text(SectionC.SECTION_C_QUESTION_46_PROPERTY_2,
-                          style: CustomStyle.optionYesNo),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      TextField(
-                          controller: question46Controller12,
-                          style: CustomStyle.answer,
-                          textAlign: TextAlign.start,
-                          decoration: CustomStyle.answerInputDecoration),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      const Text(SectionC.SECTION_C_QUESTION_46_POINT_7,
-                          style: CustomStyle.questionBoldTitle),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      const Text(SectionC.SECTION_C_QUESTION_46_PROPERTY_1,
-                          style: CustomStyle.optionYesNo),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      TextField(
-                          controller: question46Controller13,
-                          style: CustomStyle.answer,
-                          textAlign: TextAlign.start,
-                          decoration: CustomStyle.answerInputDecoration),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      const Text(SectionC.SECTION_C_QUESTION_46_PROPERTY_2,
-                          style: CustomStyle.optionYesNo),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      TextField(
-                          controller: question46Controller14,
-                          style: CustomStyle.answer,
-                          textAlign: TextAlign.start,
-                          decoration: CustomStyle.answerInputDecoration),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      const Text(SectionC.SECTION_C_QUESTION_46_POINT_8,
-                          style: CustomStyle.questionBoldTitle),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      const Text(SectionC.SECTION_C_QUESTION_46_PROPERTY_1,
-                          style: CustomStyle.optionYesNo),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      TextField(
-                          controller: question46Controller15,
-                          style: CustomStyle.answer,
-                          textAlign: TextAlign.start,
-                          decoration: CustomStyle.answerInputDecoration),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      const Text(SectionC.SECTION_C_QUESTION_46_PROPERTY_2,
-                          style: CustomStyle.optionYesNo),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      TextField(
-                          controller: question46Controller16,
-                          style: CustomStyle.answer,
-                          textAlign: TextAlign.start,
-                          decoration: CustomStyle.answerInputDecoration),
                     ],
                   ),
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    InkWell(
-                        onTap: () => syncData(context),
-                        splashColor: Colors.lightBlue,
-                        borderRadius: BorderRadius.circular(2),
-                        child: CustomButton.nextButton),
-                  ],
-                ),
-                const SizedBox(
-                  height: 100,
-                ),
-              ],
+                  Container(
+                    alignment: Alignment.center,
+                    child: const SizedBox(
+                        height: 20,
+                        width: 300,
+                        child: Divider(color: Color(0xffD1D0BD))),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(
+                        left: 10.0, right: 10.0, top: 25.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(SectionC.SECTION_C_QUESTION_46,
+                            style: CustomStyle.questionTitle),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        const Text(SectionC.SECTION_C_QUESTION_46_POINT_1,
+                            style: CustomStyle.questionBoldTitle),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        const Text(SectionC.SECTION_C_QUESTION_46_PROPERTY_1,
+                            style: CustomStyle.optionYesNo),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        TextField(
+                            controller: question46Controller1,
+                            style: CustomStyle.answer,
+                            textAlign: TextAlign.start,
+                            decoration: CustomStyle.answerInputDecoration),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        const Text(SectionC.SECTION_C_QUESTION_46_PROPERTY_2,
+                            style: CustomStyle.optionYesNo),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        TextField(
+                            controller: question46Controller2,
+                            style: CustomStyle.answer,
+                            textAlign: TextAlign.start,
+                            decoration: CustomStyle.answerInputDecoration),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        const Text(SectionC.SECTION_C_QUESTION_46_POINT_2,
+                            style: CustomStyle.questionBoldTitle),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        const Text(SectionC.SECTION_C_QUESTION_46_PROPERTY_1,
+                            style: CustomStyle.optionYesNo),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        TextField(
+                            controller: question46Controller3,
+                            style: CustomStyle.answer,
+                            textAlign: TextAlign.start,
+                            decoration: CustomStyle.answerInputDecoration),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        const Text(SectionC.SECTION_C_QUESTION_46_PROPERTY_2,
+                            style: CustomStyle.optionYesNo),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        TextField(
+                            controller: question46Controller4,
+                            style: CustomStyle.answer,
+                            textAlign: TextAlign.start,
+                            decoration: CustomStyle.answerInputDecoration),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        const Text(SectionC.SECTION_C_QUESTION_46_POINT_3,
+                            style: CustomStyle.questionBoldTitle),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        const Text(SectionC.SECTION_C_QUESTION_46_PROPERTY_1,
+                            style: CustomStyle.optionYesNo),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        TextField(
+                            controller: question46Controller5,
+                            style: CustomStyle.answer,
+                            textAlign: TextAlign.start,
+                            decoration: CustomStyle.answerInputDecoration),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        const Text(SectionC.SECTION_C_QUESTION_46_PROPERTY_2,
+                            style: CustomStyle.optionYesNo),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        TextField(
+                            controller: question46Controller6,
+                            style: CustomStyle.answer,
+                            textAlign: TextAlign.start,
+                            decoration: CustomStyle.answerInputDecoration),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        const Text(SectionC.SECTION_C_QUESTION_46_POINT_4,
+                            style: CustomStyle.questionBoldTitle),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        const Text(SectionC.SECTION_C_QUESTION_46_PROPERTY_1,
+                            style: CustomStyle.optionYesNo),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        TextField(
+                            controller: question46Controller7,
+                            style: CustomStyle.answer,
+                            textAlign: TextAlign.start,
+                            decoration: CustomStyle.answerInputDecoration),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        const Text(SectionC.SECTION_C_QUESTION_46_PROPERTY_2,
+                            style: CustomStyle.optionYesNo),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        TextField(
+                            controller: question46Controller8,
+                            style: CustomStyle.answer,
+                            textAlign: TextAlign.start,
+                            decoration: CustomStyle.answerInputDecoration),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        const Text(SectionC.SECTION_C_QUESTION_46_POINT_5,
+                            style: CustomStyle.questionBoldTitle),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        const Text(SectionC.SECTION_C_QUESTION_46_PROPERTY_1,
+                            style: CustomStyle.optionYesNo),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        TextField(
+                            controller: question46Controller9,
+                            style: CustomStyle.answer,
+                            textAlign: TextAlign.start,
+                            decoration: CustomStyle.answerInputDecoration),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        const Text(SectionC.SECTION_C_QUESTION_46_PROPERTY_2,
+                            style: CustomStyle.optionYesNo),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        TextField(
+                            controller: question46Controller10,
+                            style: CustomStyle.answer,
+                            textAlign: TextAlign.start,
+                            decoration: CustomStyle.answerInputDecoration),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        const Text(SectionC.SECTION_C_QUESTION_46_POINT_6,
+                            style: CustomStyle.questionBoldTitle),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        const Text(SectionC.SECTION_C_QUESTION_46_PROPERTY_1,
+                            style: CustomStyle.optionYesNo),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        TextField(
+                            controller: question46Controller11,
+                            style: CustomStyle.answer,
+                            textAlign: TextAlign.start,
+                            decoration: CustomStyle.answerInputDecoration),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        const Text(SectionC.SECTION_C_QUESTION_46_PROPERTY_2,
+                            style: CustomStyle.optionYesNo),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        TextField(
+                            controller: question46Controller12,
+                            style: CustomStyle.answer,
+                            textAlign: TextAlign.start,
+                            decoration: CustomStyle.answerInputDecoration),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        const Text(SectionC.SECTION_C_QUESTION_46_POINT_7,
+                            style: CustomStyle.questionBoldTitle),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        const Text(SectionC.SECTION_C_QUESTION_46_PROPERTY_1,
+                            style: CustomStyle.optionYesNo),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        TextField(
+                            controller: question46Controller13,
+                            style: CustomStyle.answer,
+                            textAlign: TextAlign.start,
+                            decoration: CustomStyle.answerInputDecoration),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        const Text(SectionC.SECTION_C_QUESTION_46_PROPERTY_2,
+                            style: CustomStyle.optionYesNo),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        TextField(
+                            controller: question46Controller14,
+                            style: CustomStyle.answer,
+                            textAlign: TextAlign.start,
+                            decoration: CustomStyle.answerInputDecoration),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        const Text(SectionC.SECTION_C_QUESTION_46_POINT_8,
+                            style: CustomStyle.questionBoldTitle),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        const Text(SectionC.SECTION_C_QUESTION_46_PROPERTY_1,
+                            style: CustomStyle.optionYesNo),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        TextField(
+                            controller: question46Controller15,
+                            style: CustomStyle.answer,
+                            textAlign: TextAlign.start,
+                            decoration: CustomStyle.answerInputDecoration),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        const Text(SectionC.SECTION_C_QUESTION_46_PROPERTY_2,
+                            style: CustomStyle.optionYesNo),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        TextField(
+                            controller: question46Controller16,
+                            style: CustomStyle.answer,
+                            textAlign: TextAlign.start,
+                            decoration: CustomStyle.answerInputDecoration),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      InkWell(
+                          onTap: () => syncData(context),
+                          splashColor: Colors.lightBlue,
+                          borderRadius: BorderRadius.circular(2),
+                          child: CustomButton.nextButton),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 100,
+                  ),
+                ],
+              ),
             ),
           ),
         ),
       ),
-    ));
+    );
   }
 
   void setData() async {
@@ -533,7 +537,7 @@ class _Screen24State extends State<Screen24> {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (_) {
-          return const Screen25();
+          return Screen25(formName: widget.formName);
         },
       ),
     );

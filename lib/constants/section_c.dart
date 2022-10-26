@@ -107,22 +107,22 @@ class SectionC {
       "39. What are the activities for which residents act collectively?";
 
   static const String SECTION_C_QUESTION_39_OPTION_1 =
-      "(1) Social engagements (wedding, funeral, festival) ";
+      "Social engagements (wedding, funeral, festival) ";
   static const String SECTION_C_QUESTION_39_OPTION_2 =
-      "(2) Agricultural activities (sowing, weeding, harvesting) ";
+      "Agricultural activities (sowing, weeding, harvesting) ";
   static const String SECTION_C_QUESTION_39_OPTION_3 =
-      "(3) Agriculture products (Harvest, Process, Sale)";
+      "Agriculture products (Harvest, Process, Sale)";
   static const String SECTION_C_QUESTION_39_OPTION_4 =
-      "(4) Plant products from the forest (Harvest, Process, Sale) ";
+      "Plant products from the forest (Harvest, Process, Sale) ";
   static const String SECTION_C_QUESTION_39_OPTION_5 =
-      "(5) Animal products from the forest (Harvest, Process, Sale) ";
+      "Animal products from the forest (Harvest, Process, Sale) ";
   static const String SECTION_C_QUESTION_39_OPTION_6 =
-      "(6) Livestock products (Harvest, Process, Sale) ";
+      "Livestock products (Harvest, Process, Sale) ";
   static const String SECTION_C_QUESTION_39_OPTION_7 =
-      "(7) Handicrafts (Harvest, Process, Sale) ";
+      "Handicrafts (Harvest, Process, Sale) ";
   static const String SECTION_C_QUESTION_39_OPTION_8 =
-      "(8) Infrastructure maintenance (buildings, ponds, irrigation) ";
-  static const String SECTION_C_QUESTION_39_OPTION_9 = "(9) Others";
+      "Infrastructure maintenance (buildings, ponds, irrigation) ";
+  static const String SECTION_C_QUESTION_39_OPTION_9 = "Others";
 
   static const String SECTION_C_QUESTION_40 =
       "40. What institutions/organizations are active in this site? ";
@@ -134,7 +134,7 @@ class SectionC {
   static const String SECTION_C_QUESTION_40_LEFT_4 = "Religious institution";
   static const String SECTION_C_QUESTION_40_LEFT_5 =
       "Non government organization";
-  static const String SECTION_C_QUESTION_40_LEFT_6 = "Others (Specify)";
+  static const String SECTION_C_QUESTION_40_LEFT_6 = "Others";
 
   static const String SECTION_C_QUESTION_40_RIGHT_1 = "Livestock";
   static const String SECTION_C_QUESTION_40_RIGHT_2 = "Agriculture";
@@ -191,7 +191,7 @@ class SectionC {
   static const String SECTION_C_QUESTION_49 =
       "49. When was the last election to a democratic representative institution held? ";
   static const String SECTION_C_QUESTION_50 =
-      "50. How many members voted in the last election? (Almost all members, more than half, about one-third, very few, none)";
+      "50. How many members voted in the last election?";
 
   static const String SECTION_C_QUESTION_50_POINT_1 = "Men";
   static const String SECTION_C_QUESTION_50_POINT_2 = "Women";
